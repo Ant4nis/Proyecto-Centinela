@@ -1,0 +1,16 @@
+LICENCIA DE LA FUENTE UTILIZADA
+
+Fuente: Hack  
+Autores: Source Foundry Authors  
+Licencia: MIT  
+URL: https://sourcefoundry.org/hack/
+
+Copyright (c) 2018 Source Foundry Authors
+
+Se concede permiso, libre de cargos, a cualquier persona que obtenga una copia de esta fuente y los archivos de documentación asociados (el "Software"), para usar el Software sin restricción, incluyendo sin limitación los derechos a usar, copiar, modificar, fusionar, publicar, distribuir, sublicenciar y/o vender copias del Software, sujeto a las siguientes condiciones:
+
+El aviso de copyright anterior y esta nota de permiso se incluirán en todas las copias o partes sustanciales del Software.
+
+EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO NO LIMITÁNDOSE A GARANTÍAS DE COMERCIABILIDAD, ADECUACIÓN PARA UN PROPÓSITO PARTICULAR E INFRACCIÓN.
+
+---

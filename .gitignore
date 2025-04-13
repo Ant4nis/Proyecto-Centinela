@@ -1,0 +1,36 @@
+# UNITY
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+Assets/AssetStoreTools*
+
+# UNITY: Auto generated VS/Rider files
+*.csproj
+*.unityproj
+*.sln
+*.user
+*.pidb
+*.booproj
+*.svd
+*.suo
+*.sdf
+*.pdb
+
+# UNITY: Rider & JetBrains
+.idea/
+*.dotCover
+*.DotSettings
+*.dotSettings.user
+
+# SYSTEM
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# LOGS
+*.log
+
+# USER SETTINGS
+*.userprefs
