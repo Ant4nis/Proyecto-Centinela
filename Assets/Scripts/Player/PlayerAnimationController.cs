@@ -12,12 +12,12 @@ namespace Player
     /// </summary>
     public class PlayerAnimationController : MonoBehaviour
     {
-        // Hashes de los parámetros del Animator para mejorar el rendimiento.
+        // Hashes de los parámetros del Animator para mejorar el rendimiento y prevenir errores de escritura.
         private static readonly int X = Animator.StringToHash("X");
         private static readonly int Y = Animator.StringToHash("Y");
         private static readonly int IsMoving = Animator.StringToHash("Moving");
 
-        [Header("Referencias de Input"), Tooltip("Componente que gestiona la entrada del jugador utilizando el nuevo sistema de InputActions")]
+        [Header("Referencias de Input"), Tooltip("Componente que gestiona la entrada del jugador")]
         [SerializeField] private PlayerInputReader inputReader;
         
         private Animator _animator;

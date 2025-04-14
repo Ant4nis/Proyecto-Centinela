@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac786dade4a86274286f13be322f5797, type: 3}
+  m_Name: Plantilla
+  m_EditorClassIdentifier: 
+  templates:
+  - {fileID: 2800000, guid: 8178d8e3dd34eac43be60056fe0ee5ed, type: 3}
+  - {fileID: 2800000, guid: 2d7930918a68e1448bcacac93d4edfb3, type: 3}
+  - {fileID: 2800000, guid: 80ca6bb758846fe49907e00bff6de8fc, type: 3}
+  - {fileID: 2800000, guid: 14309f0ef2312304bb857086debfa576, type: 3}
+  - {fileID: 2800000, guid: b212bea400e1d8e47a068a9a63dddddf, type: 3}
+  - {fileID: 2800000, guid: 8f278783fcc71d741a99070102542d67, type: 3}
+  - {fileID: 2800000, guid: 5ca66b8d43f3cfb408d1816a3caa8784, type: 3}
+  - {fileID: 2800000, guid: a7113e866a96ff7449561ae5b29bbd35, type: 3}
+  - {fileID: 2800000, guid: 6abda1106eff194418066cf7337be599, type: 3}
+  - {fileID: 2800000, guid: 0760b1d5f3cf1d54298c3ffa8c78a6b2, type: 3}
+  - {fileID: 2800000, guid: d0102330c22680e458ee90a6cd527524, type: 3}
+  - {fileID: 2800000, guid: 286afa9edc06b6e4ea2e29ec5f202487, type: 3}
+  - {fileID: 2800000, guid: b716749d71913a94e9cea288d0ea18c8, type: 3}
+  prop:
+  - propName: Box_1
+    propColor: {r: 0.29411766, g: 0.33333334, b: 0.44313726, a: 1}
+    propPrefab: {fileID: 1928815808455521197, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
+  - propName: Spikes
+    propColor: {r: 0.827451, g: 0.7607843, b: 0.5568628, a: 1}
+    propPrefab: {fileID: 2217683266779708175, guid: f1e1a9b8f1d731b46af0f8eb9e1da69f, type: 3}
+  - propName: Box_2
+    propColor: {r: 0.3254902, g: 0.57254905, b: 0.57254905, a: 1}
+    propPrefab: {fileID: 2267016630071894744, guid: 089530b52d27db44599cf406006d5121, type: 3}
+  - propName: Box_3
+    propColor: {r: 0.3529412, g: 0.3254902, b: 0.57254905, a: 1}
+    propPrefab: {fileID: 8822474259086994038, guid: e8f5c0351a2ce7b4fa088f3adcf228fb, type: 3}
+  - propName: Clock
+    propColor: {r: 0.44313726, g: 0.40784314, b: 0.29411766, a: 1}
+    propPrefab: {fileID: 2226168402436771492, guid: 82a0112706707fe48b2ca29edfadf9bd, type: 3}
+  - propName: Book_Table
+    propColor: {r: 0.29411766, g: 0.44313726, b: 0.3137255, a: 1}
+    propPrefab: {fileID: 5701933352269568028, guid: e3bf85486db0c454f84633b8db3ae8a1, type: 3}
+  - propName: Bedside_Table
+    propColor: {r: 0.45882353, g: 0.16862746, b: 0.16862746, a: 1}
+    propPrefab: {fileID: 677349519740266446, guid: 90aec1e60c4297542830f99967176542, type: 3}
