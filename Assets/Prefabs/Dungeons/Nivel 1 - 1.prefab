@@ -234,6 +234,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2853866703816664489}
     m_Modifications:
+    - target: {fileID: 2036153431285197263, guid: d22f0eea1fc836242bc46c28653f1aea, type: 3}
+      propertyPath: roomType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4141050912360004294, guid: d22f0eea1fc836242bc46c28653f1aea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -522,6 +526,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1343878140573753281, guid: 8b8f30602e3de034585b09333af22966, type: 3}
+      propertyPath: roomType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7128448272791113431, guid: 8b8f30602e3de034585b09333af22966, type: 3}
       propertyPath: m_Name
       value: Room_2C_WE
@@ -544,6 +552,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2853866703816664489}
     m_Modifications:
+    - target: {fileID: 4166271349879361052, guid: 7c160688eaf1413408557ff0851beb58, type: 3}
+      propertyPath: roomType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6434213211739730145, guid: 7c160688eaf1413408557ff0851beb58, type: 3}
       propertyPath: m_LocalPosition.x
       value: -52

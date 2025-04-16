@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Tests;
 using UnityEngine;
 
-namespace Tests
+namespace ScriptableObjects
 {
     /// <summary>
     /// ScriptableObject que permite configurar la activación de mensajes de depuración por categoría.
     /// </summary>
-    [CreateAssetMenu(fileName = "ConfigTest", menuName = "Tests/Debug/Debug Config")]
+    [CreateAssetMenu(fileName = "ConfigTest", menuName = "/Debug/Debug Config")]
     public class DebugConfig : ScriptableObject
     {
         [Serializable]

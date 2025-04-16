@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Dungeon
+namespace ScriptableObjects
 {
     /// <summary>
     /// ScriptableObject que define una plantilla de habitación para el sistema de generación procedural de niveles.

@@ -33,7 +33,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 0
+  isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -209,7 +209,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      plantilla_pinchos_cajas_0: 6414702483460647651
+      plantilla_pinchos_cajas_1: 5527579601795484559
+      plantilla_pinchos_cajas_2: -3174393390487073119
+      plantilla_pinchos_cajas_3: -5355475269335684701
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

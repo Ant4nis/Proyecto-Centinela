@@ -33,7 +33,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 0
+  isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -209,7 +209,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plantilla_Puas_1_0: 2209789558508057343
+      Plantilla_Puas_1_1: 9118700665057693585
+      Plantilla_Puas_1_2: 5153170741469173920
+      Plantilla_Puas_1_3: 5929615918958384864
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
