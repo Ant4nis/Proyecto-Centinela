@@ -1,4 +1,5 @@
 using System;
+using Extra;
 using Player;
 using ScriptableObjects;
 using TMPro;
@@ -8,59 +9,98 @@ using UnityEngine.UI;
 namespace Managers
 {
     /// <summary>
-    /// Componente encargado de actualizar la interfaz de usuario (UI) del jugador.
-    /// 
-    /// Funcionalidades:
-    /// 1. Actualiza las barras de estado del jugador (salud, armadura y munición) utilizando interpolación (Lerp) para transiciones suaves.
-    /// 2. Actualiza los textos de la UI que muestran los valores numéricos actuales y máximos de salud, armadura y munición.
-    /// 3. Utiliza la configuración del jugador obtenida de un ScriptableObject para reflejar cambios en tiempo real.
+    /// Gestor de la interfaz de usuario (UI) del jugador que:
+    /// 1. Implementa el patrón Singleton para acceso global.
+    /// 2. Actualiza las barras de estado (salud, armadura, munición) con interpolación suave (Lerp).
+    /// 3. Actualiza los textos de la UI con los valores actuales y máximos.
+    /// 4. Gestiona el efecto de fade de transición entre mazmorras.
     /// </summary>
     public class UIManager : MonoBehaviour
     {
-        // TEMPORAL: Configuración del jugador para propósitos de testing.
+        /// <summary>
+        /// Instancia global del UIManager accesible desde cualquier parte del juego.
+        /// </summary>
+        public static UIManager Instance;
+        
         [Header("PARA TESTING")]
+        [Tooltip("Configuración temporal del jugador para pruebas.")]
         [SerializeField] private PlayerConfiguration playerConfig;
         
-        [Header("Imágenes UI"), Tooltip("Barra de salud del jugador")]
+        [Header("Imágenes UI")]
+        [Tooltip("Barra que muestra el porcentaje de salud actual.")]
         [SerializeField] private Image playerHealthBar;
-        [Tooltip("Barra de armadura del jugador")]
+        [Tooltip("Barra que muestra el porcentaje de armadura actual.")]
         [SerializeField] private Image playerArmorBar;
-        [Tooltip("Barra de munición del jugador")]
+        [Tooltip("Barra que muestra el porcentaje de munición actual.")]
         [SerializeField] private Image playerAmmoBar;
         
-        [Header("Textos UI"), Tooltip("Nivel de salud del jugador")]
+        [Header("Textos UI")]
+        [Tooltip("Texto que muestra la salud actual y máxima.")]
         [SerializeField] private TextMeshProUGUI playerHealthText;
-        [Tooltip("Nivel de blindaje del jugador")]
+        [Tooltip("Texto que muestra la armadura actual y máxima.")]
         [SerializeField] private TextMeshProUGUI playerArmorText;
-        [Tooltip("Nivel de munición del jugador")]
+        [Tooltip("Texto que muestra la munición actual y máxima.")]
         [SerializeField] private TextMeshProUGUI playerAmmoText;
         
+        [Header("UI Extra")]
+        [Tooltip("CanvasGroup utilizado para el efecto de fade en transiciones.")]
+        [SerializeField] private CanvasGroup fadePanel;
+
+        /// <summary>
+        /// Inicializa la instancia Singleton al cargar el componente.
+        /// </summary>
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        /// <summary>
+        /// Llamado cada frame para actualizar dinámicamente la UI.
+        /// </summary>
         private void Update()
         {
             UpdateUI();
         }
 
         /// <summary>
-        /// Actualiza los elementos de la interfaz de usuario.
+        /// Actualiza las barras y textos de la UI.
         /// 
         /// Funcionalidades:
-        /// 1. Actualiza las barras de salud, armadura y munición mediante interpolación para una transición suave.
-        /// 2. Actualiza los textos de la UI para mostrar los valores actuales y máximos de cada estadística.
+        /// 1. Interpola (Lerp) el valor de las barras de salud, armadura y munición.
+        /// 2. Actualiza los textos con el formato "actual/máximo".
         /// </summary>
         private void UpdateUI()
         {
-            // Actualiza las barras de la UI utilizando Lerp para transiciones suaves.
-            playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount,
-                playerConfig.CurrentHealth / playerConfig.MaxHealth, 10f * Time.deltaTime);
-            playerArmorBar.fillAmount = Mathf.Lerp(playerArmorBar.fillAmount,
-                playerConfig.CurrentArmor / playerConfig.MaxArmor, 10f * Time.deltaTime);
-            playerAmmoBar.fillAmount = Mathf.Lerp(playerAmmoBar.fillAmount,
-                playerConfig.CurrentAmmo / playerConfig.MaxAmmo, 10f * Time.deltaTime);
+            // Transición suave de las barras
+            playerHealthBar.fillAmount = Mathf.Lerp(
+                playerHealthBar.fillAmount,
+                playerConfig.CurrentHealth / playerConfig.MaxHealth,
+                10f * Time.deltaTime
+            );
+            playerArmorBar.fillAmount = Mathf.Lerp(
+                playerArmorBar.fillAmount,
+                playerConfig.CurrentArmor / playerConfig.MaxArmor,
+                10f * Time.deltaTime
+            );
+            playerAmmoBar.fillAmount = Mathf.Lerp(
+                playerAmmoBar.fillAmount,
+                playerConfig.CurrentAmmo / playerConfig.MaxAmmo,
+                10f * Time.deltaTime
+            );
 
-            // Actualiza los textos de la UI para reflejar los valores actuales y máximos.
+            // Actualización de textos
             playerHealthText.text = $"{playerConfig.CurrentHealth}/{playerConfig.MaxHealth}";
-            playerArmorText.text = $"{playerConfig.CurrentArmor}/{playerConfig.MaxArmor}";
-            playerAmmoText.text = $"{playerConfig.CurrentAmmo}/{playerConfig.MaxAmmo}";
+            playerArmorText.text  = $"{playerConfig.CurrentArmor}/{playerConfig.MaxArmor}";
+            playerAmmoText.text   = $"{playerConfig.CurrentAmmo}/{playerConfig.MaxAmmo}";
+        }
+
+        /// <summary>
+        /// Inicia un fade del panel de UI a un valor de alpha determinado.
+        /// </summary>
+        /// <param name="targetAlpha">Valor final de alpha (0 = transparente, 1 = opaco).</param>
+        public void NewDungeonFade(float targetAlpha)
+        {
+            StartCoroutine(Helper.IEFade(fadePanel, targetAlpha, 1.5f));
         }
     }
 }

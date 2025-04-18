@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 1299605460380426241}
   m_Layer: 0
   m_Name: Appearance
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 5407859787550996729}
   m_Layer: 0
   m_Name: Input
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -363,7 +363,7 @@ GameObject:
   - component: {fileID: 500562005893517870}
   m_Layer: 0
   m_Name: Physics
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

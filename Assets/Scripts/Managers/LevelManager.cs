@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Dungeon;
 using Dungeon.Lists;
 using ScriptableObjects;
@@ -7,16 +8,14 @@ using UnityEngine.Serialization;
 
 namespace Managers
 {
-        /// <summary>
-    /// Gestor central del nivel que proporciona acceso global a las plantillas de generación de salas.
-    /// 
-    /// Funcionalidades:
-    /// 1. Almacena la plantilla de habitaciones generales (TemplatesRoom).
-    /// 2. Almacena la plantilla específica para habitaciones tipo Puzzle (PuzzleRoomTemplate).
-    /// 3. Almacena referencias a librerías de mazmorras (DungeonLibrary) usadas para generación de puertas.
-    /// 4. Expone dichas plantillas mediante propiedades públicas para que otros sistemas (como Room) las usen.
-    /// 5. Implementa patrón Singleton para acceso global desde otras clases.
-    /// 6. Responde a eventos cuando el jugador entra a una habitación.
+    /// <summary>
+    /// Gestor central del nivel que:
+    /// 1. Implementa el patrón Singleton para acceso global.
+    /// 2. Crea y destruye instancias de mazmorras según el nivel e índice actuales.
+    /// 3. Controla la transición entre mazmorras con un efecto de fade.
+    /// 4. Teletransporta al jugador a la sala de entrada tras generar una nueva mazmorra.
+    /// 5. Cierra las puertas de la sala si no está completada al entrar el jugador.
+    /// 6. Se suscribe y desuscribe a eventos de entrada en sala y activación de portal.
     /// </summary>
     public class LevelManager : MonoBehaviour
     {
@@ -24,6 +23,10 @@ namespace Managers
         /// Instancia global del LevelManager accesible desde cualquier parte del juego.
         /// </summary>
         public static LevelManager Instance;
+        
+        [Header("TEMPORAL")]
+        [Tooltip("Referencia al Transform del jugador para teletransportarlo.")]
+        [SerializeField] private Transform player;
         
         [Header("Plantillas Generales")]
         [Tooltip("Plantilla general para la generación de habitaciones no-puzzle.")]
@@ -48,12 +51,16 @@ namespace Managers
         public PuzzleRoomTemplate PuzzleRoomTemplate => puzzleRoomTemplate;
 
         /// <summary>
-        /// Acceso público a la librería de mazmorra que contiene referencias a elementos como puertas.
+        /// Acceso público a la librería de mazmorra con prefabs de puertas y niveles.
         /// </summary>
         public DungeonLibrary DungeonLibrary => dungeonLibrary;
+
+        private int _currentLevelIndex;
+        private int _currentDungeonIndex;
+        private GameObject _currentDungeonGO;
         
         /// <summary>
-        /// Referencia a la sala en la que se encuentra actualmente el jugador.
+        /// Sala en la que se encuentra actualmente el jugador.
         /// </summary>
         private Room _currentRoom;
         
@@ -66,10 +73,82 @@ namespace Managers
         }
 
         /// <summary>
-        /// Maneja la lógica cuando el jugador entra a una sala.
-        /// Cierra las puertas si la sala no ha sido completada aún.
+        /// Al iniciar, crea la primera mazmorra.
         /// </summary>
-        /// <param name="room">Sala a la que el jugador ha entrado.</param>
+        private void Start()
+        {
+            CreateDungeon();
+        }
+
+        /// <summary>
+        /// Instancia la mazmorra correspondiente al nivel e índice actuales.
+        /// </summary>
+        private void CreateDungeon()
+        {
+           _currentDungeonGO = Instantiate(
+               dungeonLibrary.Levels[_currentLevelIndex].Dungeons[_currentDungeonIndex],
+               transform
+           );
+        }
+
+        /// <summary>
+        /// Avanza al siguiente dungeon; si supera el último, pasa al siguiente nivel.
+        /// Destruye la instancia actual, crea la nueva y teletransporta al jugador.
+        /// </summary>
+        private void NextDungeon()
+        {
+            _currentDungeonIndex++;
+
+            if (_currentDungeonIndex > dungeonLibrary.Levels[_currentLevelIndex].Dungeons.Length - 1)
+            {
+                _currentDungeonIndex = 0;
+                _currentLevelIndex++;
+            }
+            
+            Destroy(_currentDungeonGO);
+            CreateDungeon();
+            PlayerTeleport();
+        }
+
+        /// <summary>
+        /// Encuentra la sala de entrada en la mazmorra recién generada y mueve al jugador a ella.
+        /// </summary>
+        private void PlayerTeleport()
+        {
+            Room[] newDungeonRooms = _currentDungeonGO.GetComponentsInChildren<Room>();
+            Room entranceRoom = null;
+
+            for (int i = 0; i < newDungeonRooms.Length; i++)
+            {
+                if (newDungeonRooms[i].RoomType == RoomType.EntranceRoom)
+                {
+                    entranceRoom = newDungeonRooms[i];
+                }
+            }
+
+            if (entranceRoom != null && player != null)
+            {
+                player.transform.position = entranceRoom.transform.position;
+            }
+        }
+
+        /// <summary>
+        /// Coroutine que aplica el fade de salida, espera la duración,
+        /// cambia de mazmorra y aplica el fade de entrada.
+        /// </summary>
+        private IEnumerator IEFadeDungeon()
+        {
+            UIManager.Instance.NewDungeonFade(1f);
+            yield return new WaitForSeconds(1.5f);
+            NextDungeon();
+            UIManager.Instance.NewDungeonFade(0f);
+        }
+        
+        /// <summary>
+        /// Maneja el evento de entrada del jugador en una sala:
+        /// cierra las puertas si la sala no está completada.
+        /// </summary>
+        /// <param name="room">Sala a la que ha entrado el jugador.</param>
         private void PlayerInRoomResponse(Room room)
         {
             _currentRoom = room;
@@ -81,19 +160,30 @@ namespace Managers
         }
 
         /// <summary>
-        /// Se suscribe al evento que detecta que el jugador ha entrado en una sala.
+        /// Maneja el evento de activación del portal (escalera hacia abajo),
+        /// iniciando la transición entre mazmorras.
+        /// </summary>
+        private void EventPortalResponse()
+        {
+            StartCoroutine(IEFadeDungeon());
+        }
+        
+        /// <summary>
+        /// Suscribe los manejadores a los eventos al habilitar este componente.
         /// </summary>
         private void OnEnable()
         {
-            Room.PlayerInRoomEvent += PlayerInRoomResponse;
+            Room.PlayerInRoomEvent  += PlayerInRoomResponse;
+            StairsDown.PortalEvent  += EventPortalResponse;
         }
 
         /// <summary>
-        /// Se desuscribe del evento al desactivarse este componente.
+        /// Desuscribe los manejadores de los eventos al deshabilitar este componente.
         /// </summary>
         private void OnDisable()
         {
-            Room.PlayerInRoomEvent -= PlayerInRoomResponse;
+            Room.PlayerInRoomEvent  -= PlayerInRoomResponse;
+            StairsDown.PortalEvent  -= EventPortalResponse;
         }
     }
 }

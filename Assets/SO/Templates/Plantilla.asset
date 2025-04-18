@@ -51,3 +51,6 @@ MonoBehaviour:
   - propName: Compact_Box
     propColor: {r: 0.43529412, g: 0.17254902, b: 0.45882353, a: 1}
     propPrefab: {fileID: 8968015934415681832, guid: 9c82f56812620c946ba2c81d8bb49073, type: 3}
+  - propName: Damageable_Box
+    propColor: {r: 0.70980394, g: 0.5372549, b: 0.3647059, a: 1}
+    propPrefab: {fileID: 5434316174957035927, guid: 50aedeae0837a394ab60676122c6886b, type: 3}

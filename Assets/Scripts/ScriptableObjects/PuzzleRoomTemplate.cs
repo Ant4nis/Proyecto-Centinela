@@ -38,10 +38,6 @@ namespace ScriptableObjects
         [Tooltip("Selecciona la dificultad del puzzle.\nFacil: Plantilla sencilla. Media: Plantilla intermedia. Dificil: Plantilla compleja.")]
         [SerializeField] private PuzzleDifficulty difficulty;
 
-        [Header("Elementos Interactivos")]
-        [Tooltip("Listado de elementos interactuables definidos por color, nombre y prefab.\nEl color en la plantilla debe coincidir con el color definido en el elemento interactuable.")]
-        [SerializeField] private PuzzleProp[] puzzleProps;
-
         [Header("Configuración Adicional")]
         [Tooltip("Tiempo límite para resolver el puzzle, en segundos (0 si no aplica).")]
         [SerializeField] private float timeLimit;
@@ -55,33 +51,11 @@ namespace ScriptableObjects
         /// Devuelve el nivel de dificultad seleccionado para el puzzle.
         /// </summary>
         public PuzzleDifficulty Difficulty => difficulty;
-
-        /// <summary>
-        /// Devuelve la lista de elementos interactivos del puzzle.
-        /// </summary>
-        public PuzzleProp[] PuzzleProps => puzzleProps;
-
+        
         /// <summary>
         /// Devuelve el tiempo límite para el puzzle.
         /// </summary>
         public float TimeLimit => timeLimit;
-
     }
     
-    /// <summary>
-    /// Clase serializable que representa un elemento interactuable en la sala de puzzles.
-    /// Se vincula mediante el color utilizado en la plantilla del puzzle.
-    /// </summary>
-    [Serializable]
-    public class PuzzleProp
-    {
-        [Tooltip("Nombre identificador del elemento interactuable (solo informativo).")]
-        public string propName;
-
-        [Tooltip("Color que representa este elemento en la plantilla del puzzle.")]
-        public Color propColor;
-
-        [Tooltip("Prefab que se instanciará para este elemento interactuable.")]
-        public GameObject propPrefab;
-    }
 }

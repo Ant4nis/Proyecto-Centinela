@@ -10,6 +10,9 @@ using Random = UnityEngine.Random;
 
 namespace Dungeon
 {
+    /// <summary>
+    /// Tipos de sala posibles dentro del dungeon.
+    /// </summary>
     public enum RoomType
     {
         FreeRoom,
@@ -47,20 +50,13 @@ namespace Dungeon
         [Tooltip("Activa o desactiva la visualización de Gizmos para esta sala.")]
         [SerializeField] private bool enableGizmos;
 
-        [FormerlySerializedAs("doorN")]
         [Header("Puertas")]
         [Tooltip("Posiciones en las que se instanciarán puertas hacia el norte.")]
         [SerializeField] private Transform[] doorNPos;
-
-        [FormerlySerializedAs("doorS")]
         [Tooltip("Posiciones en las que se instanciarán puertas hacia el sur.")]
         [SerializeField] private Transform[] doorSPos;
-
-        [FormerlySerializedAs("doorE")]
         [Tooltip("Posiciones en las que se instanciarán puertas hacia el este.")]
         [SerializeField] private Transform[] doorEPos;
-
-        [FormerlySerializedAs("doorW")]
         [Tooltip("Posiciones en las que se instanciarán puertas hacia el oeste.")]
         [SerializeField] private Transform[] doorWPos;
 
@@ -68,6 +64,11 @@ namespace Dungeon
         /// Indica si la sala ha sido completada.
         /// </summary>
         public bool RoomFinished { get; private set; }
+
+        /// <summary>
+        /// Devuelve el tipo de sala (Entrada, Puzzle, etc.).
+        /// </summary>
+        public RoomType RoomType => roomType;
 
         /// <summary>
         /// Diccionario que almacena las posiciones válidas de tiles en el mundo.
@@ -176,10 +177,10 @@ namespace Dungeon
         }
 
         /// <summary>
-        /// Instancia una puerta en la posición indicada, la añade a la lista interna de puertas.
+        /// Instancia una puerta en la posición indicada y la añade a la lista de puertas.
         /// </summary>
         /// <param name="prefabDoor">Prefab de la puerta a instanciar.</param>
-        /// <param name="objPosition">Transform que representa la posición donde colocar la puerta.</param>
+        /// <param name="objPosition">Transform con la posición donde colocar la puerta.</param>
         private void CreateDoor(GameObject prefabDoor, Transform objPosition)
         {
             GameObject newDoor = Instantiate(prefabDoor, objPosition.position, Quaternion.identity, objPosition);
@@ -188,8 +189,7 @@ namespace Dungeon
         }
 
         /// <summary>
-        /// Construye todas las puertas de la sala basándose en las posiciones definidas para cada dirección.
-        /// Usa la librería de puertas del LevelManager.
+        /// Instancia las puertas en las posiciones definidas para cada dirección cardinal.
         /// </summary>
         private void BuildDoor()
         {
@@ -227,7 +227,7 @@ namespace Dungeon
         }
 
         /// <summary>
-        /// Cierra todas las puertas instanciadas en esta sala.
+        /// Cierra todas las puertas de la sala.
         /// </summary>
         public void CloseDoors()
         {
@@ -238,7 +238,7 @@ namespace Dungeon
         }
 
         /// <summary>
-        /// Abre todas las puertas instanciadas en esta sala.
+        /// Abre todas las puertas de la sala.
         /// </summary>
         public void OpenDoors()
         {
@@ -249,17 +249,15 @@ namespace Dungeon
         }
 
         /// <summary>
-        /// Determina si esta sala es de tipo "FreeRoom" o "EntranceRoom",
-        /// en cuyo caso se considera predeterminada y no requiere procesamiento.
+        /// Devuelve true si la sala es del tipo FreeRoom o EntranceRoom.
         /// </summary>
-        /// <returns>True si es una sala predeterminada; de lo contrario, false.</returns>
         private bool IsDefaultRoom()
         {
             return roomType == RoomType.EntranceRoom || roomType == RoomType.FreeRoom;
         }
 
         /// <summary>
-        /// Determina si esta sala es una sala de tipo puzzle.
+        /// Devuelve true si la sala es de tipo PuzzleRoom.
         /// </summary>
         private bool IsPuzzleRoom()
         {
@@ -267,8 +265,7 @@ namespace Dungeon
         }
 
         /// <summary>
-        /// Detecta si el jugador entra en la sala mediante un collider.
-        /// Si no es una sala por defecto, lanza el evento PlayerInRoomEvent.
+        /// Detecta la entrada del jugador en la sala y lanza el evento correspondiente.
         /// </summary>
         /// <param name="other">Collider que entra al trigger.</param>
         private void OnTriggerEnter2D(Collider2D other)
@@ -282,9 +279,8 @@ namespace Dungeon
         }
 
         /// <summary>
-        /// Dibuja un Gizmo en el editor para mostrar la disponibilidad de cada tile detectado.
-        /// Verde = disponible; rojo = ocupado.
-        /// Solo se ejecuta si está activado y hay tiles almacenados.
+        /// Dibuja los tiles detectados en editor si enableGizmos está activo.
+        /// Verde: tile disponible. Rojo: tile ocupado.
         /// </summary>
         private void OnDrawGizmosSelected()
         {

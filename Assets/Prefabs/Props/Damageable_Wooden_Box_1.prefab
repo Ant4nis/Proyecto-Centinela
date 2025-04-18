@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8968015934415681832
+--- !u!1 &5434316174957035927
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4089522051633005122}
-  - component: {fileID: 6831797033204359996}
-  - component: {fileID: 3674015729170925976}
+  - component: {fileID: 4664566348724924831}
+  - component: {fileID: 5297972820421950315}
+  - component: {fileID: 5240570391897234944}
+  - component: {fileID: 970984341657969722}
   m_Layer: 3
-  m_Name: Compact_Wooden_Box
+  m_Name: Damageable_Wooden_Box_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4089522051633005122
+--- !u!4 &4664566348724924831
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8968015934415681832}
+  m_GameObject: {fileID: 5434316174957035927}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: 24.169487, y: -28.292927, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 31405786686532449}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &6831797033204359996
+--- !u!212 &5297972820421950315
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8968015934415681832}
+  m_GameObject: {fileID: 5434316174957035927}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -89,13 +89,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
---- !u!61 &3674015729170925976
+--- !u!61 &5240570391897234944
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8968015934415681832}
+  m_GameObject: {fileID: 5434316174957035927}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -135,65 +135,17 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 0.125}
   m_EdgeRadius: 0
---- !u!1001 &6592890740650984048
-PrefabInstance:
+--- !u!114 &970984341657969722
+MonoBehaviour:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 4089522051633005122}
-    m_Modifications:
-    - target: {fileID: 1928815808455521197, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_Name
-      value: Wooden_Box_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
---- !u!4 &31405786686532449 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6562083680995600657, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-  m_PrefabInstance: {fileID: 6592890740650984048}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5434316174957035927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 788c176c65064118aa338eb64b3b5ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 4
+  destructionEffectPrefab: {fileID: 0}

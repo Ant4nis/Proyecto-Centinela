@@ -13,13 +13,6 @@ MonoBehaviour:
   m_Name: PuzzleRoomTemplate
   m_EditorClassIdentifier: 
   puzzleTemplate:
-  - {fileID: 2800000, guid: 8178d8e3dd34eac43be60056fe0ee5ed, type: 3}
+  - {fileID: 2800000, guid: 8f0f9643ccbd99f4a868ee48b789ceef, type: 3}
   difficulty: 0
-  puzzleProps:
-  - propName: PRop
-    propColor: {r: 0.29411766, g: 0.33333334, b: 0.44313726, a: 0}
-    propPrefab: {fileID: 1928815808455521197, guid: 2f5898f12256b2a4283e21ea56d0ef05, type: 3}
-  - propName: Prop2
-    propColor: {r: 0.3254902, g: 0.57254905, b: 0.57254905, a: 0}
-    propPrefab: {fileID: 2217683266779708175, guid: f1e1a9b8f1d731b46af0f8eb9e1da69f, type: 3}
   timeLimit: 0
