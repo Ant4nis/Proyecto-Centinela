@@ -99,13 +99,13 @@ MonoBehaviour:
   roomType: 0
   tilemapGrid: {fileID: 8318925542049578725}
   enableGizmos: 1
-  doorN:
+  doorNPos:
   - {fileID: 1850942007271510849}
-  doorS:
+  doorSPos:
   - {fileID: 9048062171767932997}
-  doorE:
+  doorEPos:
   - {fileID: 2874781287172375070}
-  doorW:
+  doorWPos:
   - {fileID: 2349167648999327538}
 --- !u!1 &1679709921701772889
 GameObject:

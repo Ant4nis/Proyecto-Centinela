@@ -4306,12 +4306,12 @@ MonoBehaviour:
   roomType: 0
   tilemapGrid: {fileID: 8868698401320853240}
   enableGizmos: 1
-  doorN:
+  doorNPos:
   - {fileID: 3661825023518789632}
-  doorS:
+  doorSPos:
   - {fileID: 5120705401698366005}
-  doorE: []
-  doorW: []
+  doorEPos: []
+  doorWPos: []
 --- !u!1 &6650228600336699851
 GameObject:
   m_ObjectHideFlags: 0

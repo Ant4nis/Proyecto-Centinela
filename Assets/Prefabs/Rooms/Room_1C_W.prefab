@@ -6657,8 +6657,8 @@ MonoBehaviour:
   roomType: 0
   tilemapGrid: {fileID: 3011600933266741919}
   enableGizmos: 1
-  doorN: []
-  doorS: []
-  doorE: []
-  doorW:
+  doorNPos: []
+  doorSPos: []
+  doorEPos: []
+  doorWPos:
   - {fileID: 6090147505935979350}
