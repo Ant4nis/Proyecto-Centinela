@@ -35,16 +35,18 @@ namespace Player
         private SpriteRenderer _spriteRenderer;
 
         private float _currentSpeed;
-        
         private bool _isDashing;
         private bool _isTouchingWall;
 
+        
         /// <summary>
         /// Propiedad que indica si el jugador se encuentra en movimiento.
         /// Retorna true si se recibe entrada de movimiento y el jugador no está en contacto con una pared.
         /// </summary>
         public bool IsMoving => _inputReader.MoveInput.magnitude > 0f && !_isTouchingWall;
         
+        public Vector2 LastMoveDirection { get; private set; } = Vector2.down;
+
         /// <summary>
         /// Inicializa los componentes esenciales del jugador.
         /// 1. Obtiene el componente Rigidbody2D para el control físico.
@@ -82,6 +84,11 @@ namespace Player
         /// <param name="direction">Dirección normalizada en la que se moverá el jugador.</param>
         private void Move(Vector2 direction)
         {
+            if (direction.magnitude > 0.1f)
+            {
+                LastMoveDirection = direction.normalized;
+            }
+
             _rb2D.MovePosition(_rb2D.position + direction * (_currentSpeed * Time.fixedDeltaTime));
         }
 

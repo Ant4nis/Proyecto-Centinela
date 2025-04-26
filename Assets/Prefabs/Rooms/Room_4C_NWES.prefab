@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5460608509284143126}
   - component: {fileID: 6018821008245942864}
   - component: {fileID: 7204162389365389494}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Room_4C_NWES
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}

@@ -2832,7 +2832,7 @@ GameObject:
   - component: {fileID: 4141050912360004294}
   - component: {fileID: 1402541185662114020}
   - component: {fileID: 2036153431285197263}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Room_2C_WS
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}

@@ -1896,7 +1896,7 @@ GameObject:
   - component: {fileID: 6011604880253117546}
   - component: {fileID: 5255053379627211031}
   - component: {fileID: 3210802250646180779}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Room_3C_WES
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}

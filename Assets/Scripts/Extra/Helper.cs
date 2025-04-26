@@ -1,6 +1,18 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+public enum Direction8
+{
+    Up,
+    UpRight,
+    Right,
+    DownRight,
+    Down,
+    DownLeft,
+    Left,
+    UpLeft
+}
+
 namespace Extra
 {
     /// <summary>
@@ -32,5 +44,6 @@ namespace Extra
             // Al final, asegurar que queda exactamente en el valor objetivo
             canvasGroup.alpha = targetAlpha;
         }
+        
     }
 }

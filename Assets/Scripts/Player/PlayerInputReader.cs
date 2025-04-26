@@ -19,27 +19,24 @@ namespace Player
         private PlayerInputActions _playerActions;
         // Referencia al componente de movimiento del jugador para invocar el dash.
         private PlayerMovement _playerMovement;
+        private PlayerWeapon _playerWeapon;
         
-        /// <summary>
-        /// Dirección de movimiento actual obtenida de la entrada del jugador (ya normalizada).
-        /// </summary>
+        /// <summary>Dirección de movimiento actual obtenida de la entrada del jugador (ya normalizada).</summary>
         public Vector2 MoveInput { get; private set; }
         
-        /// <summary>
-        /// Inicializa las acciones de entrada y obtiene la referencia al componente PlayerMovement.
-        /// </summary>
         private void Awake()
         {
             _playerActions = new PlayerInputActions();
             _playerMovement = GetComponentInParent<PlayerMovement>();
+            _playerWeapon = GetComponentInParent<PlayerWeapon>();
         }
 
-        /// <summary>
-        /// Se suscribe a la acción de dash del jugador para ejecutar el dash cuando se active la entrada.
-        /// </summary>
+        /// <summary>Se suscribe a la acción de dash del jugador para ejecutar el dash cuando se active la entrada.</summary>
         private void Start()
         {
             _playerActions.Player.Dash.performed += _ => _playerMovement.Dash();
+            _playerActions.Player.Attack.performed += _ => _playerWeapon.StartFiring();
+            _playerActions.Player.Attack.canceled += _ => _playerWeapon.StopFiring();
         }
         
         private void Update()
@@ -47,25 +44,19 @@ namespace Player
             ReadMovementInput();
         }
 
-        /// <summary>
-        /// Lee la entrada de movimiento del jugador utilizando el sistema de InputActions y la normaliza.
-        /// </summary>
+        /// <summary>Lee la entrada de movimiento del jugador utilizando el sistema de InputActions y la normaliza.</summary>
         private void ReadMovementInput()
         {
             MoveInput = _playerActions.Player.Move.ReadValue<Vector2>().normalized;
         }
 
-        /// <summary>
-        /// Habilita las acciones de entrada al activarse el GameObject.
-        /// </summary>
+        /// <summary>Habilita las acciones de entrada al activarse el GameObject.</summary>
         private void OnEnable()
         {
             _playerActions.Enable();
         }
 
-        /// <summary>
-        /// Deshabilita las acciones de entrada al desactivarse el GameObject.
-        /// </summary>
+        /// <summary>Deshabilita las acciones de entrada al desactivarse el GameObject.</summary>
         private void OnDisable()
         {
             _playerActions.Disable();

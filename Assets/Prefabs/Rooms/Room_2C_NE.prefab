@@ -5472,7 +5472,7 @@ GameObject:
   - component: {fileID: 125502829150485460}
   - component: {fileID: 1957447583650321309}
   - component: {fileID: 6206571955464763019}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Room_2C_NE
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}

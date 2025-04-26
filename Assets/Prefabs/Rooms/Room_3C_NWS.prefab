@@ -5769,7 +5769,7 @@ GameObject:
   - component: {fileID: 7616373074031077750}
   - component: {fileID: 1050499744474694850}
   - component: {fileID: 1589684450110769045}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Room_3C_NWS
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}

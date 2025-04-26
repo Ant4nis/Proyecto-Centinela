@@ -16,17 +16,20 @@ namespace Player
         private static readonly int X = Animator.StringToHash("X");
         private static readonly int Y = Animator.StringToHash("Y");
         private static readonly int IsMoving = Animator.StringToHash("Moving");
+        private static readonly int IsAttacking = Animator.StringToHash("Attacking");
 
         [Header("Referencias de Input"), Tooltip("Componente que gestiona la entrada del jugador")]
         [SerializeField] private PlayerInputReader inputReader;
         
         private Animator _animator;
         private PlayerMovement _movement;
+        private PlayerWeapon _playerWeapon;
         
         private void Awake()
         {
             _animator = GetComponent<Animator>();
             _movement = GetComponentInParent<PlayerMovement>();
+            _playerWeapon = GetComponentInParent<PlayerWeapon>();
         }
         
         private void Update()
@@ -43,15 +46,28 @@ namespace Player
         /// </summary>
         private void UpdateDirections()
         {
-            if (!_movement.IsMoving)
-            {
-                _animator.SetBool(IsMoving, false);
-                return;
-            }
+            if (_playerWeapon.IsAttacking) return;
             
-            _animator.SetBool(IsMoving, true);
-            _animator.SetFloat(X, inputReader.MoveInput.x);
-            _animator.SetFloat(Y, inputReader.MoveInput.y);
+            Vector2 direction;
+
+            if (_movement.IsMoving)
+            {
+                direction = inputReader.MoveInput;
+                _animator.SetBool(IsMoving, true);
+            }
+            else
+            {
+                direction = _movement.LastMoveDirection;
+                _animator.SetBool(IsMoving, false);
+            }
+
+            _animator.SetFloat(X, direction.x);
+            _animator.SetFloat(Y, direction.y);
+        }
+
+        public void SetAttacking(bool isAttacking)
+        {
+            _animator.SetBool(IsAttacking, isAttacking);
         }
     }
 }
