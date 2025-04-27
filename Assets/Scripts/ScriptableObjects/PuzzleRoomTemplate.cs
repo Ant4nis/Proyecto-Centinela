@@ -42,19 +42,13 @@ namespace ScriptableObjects
         [Tooltip("Tiempo límite para resolver el puzzle, en segundos (0 si no aplica).")]
         [SerializeField] private float timeLimit;
         
-        /// <summary>
-        /// Devuelve las texturas de plantilla del puzzle.
-        /// </summary>
+        /// <summary>Devuelve las texturas de plantilla del puzzle.</summary>
         public Texture2D[] PuzzleTemplate => puzzleTemplate;
 
-        /// <summary>
-        /// Devuelve el nivel de dificultad seleccionado para el puzzle.
-        /// </summary>
+        /// <summary>Devuelve el nivel de dificultad seleccionado para el puzzle.</summary>
         public PuzzleDifficulty Difficulty => difficulty;
         
-        /// <summary>
-        /// Devuelve el tiempo límite para el puzzle.
-        /// </summary>
+        /// <summary>Devuelve el tiempo límite para el puzzle.</summary>
         public float TimeLimit => timeLimit;
     }
     

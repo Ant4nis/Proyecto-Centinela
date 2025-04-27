@@ -13,7 +13,7 @@ namespace Player
     /// 3. Restaurar la armadura hasta alcanzar el valor máximo configurado.
     /// 4. Ejecutar la lógica de manejo de la muerte del jugador.
     /// </summary>
-    public class PlayerHealth : MonoBehaviour, IDamageable
+    public class PlayerHealth : MonoBehaviour, ITakeDamage
     {
         [Header("Configuración del Jugador (Scriptable Object)"), Tooltip("Configuración del jugador que contiene los valores de salud y armadura.")]
         [SerializeField] private PlayerConfiguration playerConfig;

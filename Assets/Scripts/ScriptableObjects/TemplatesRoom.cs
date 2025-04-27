@@ -22,14 +22,10 @@ namespace ScriptableObjects
         [Tooltip("Listado de props definidos por color, nombre y prefab.\nEstos colores deben coincidir con los usados en los templates.")]
         [SerializeField] private PropsRoom[] prop;
 
-        /// <summary>
-        /// Devuelve las texturas de plantillas.
-        /// </summary>
+        /// <summary>Devuelve las texturas de plantillas.</summary>
         public Texture2D[] Templates => templates;
 
-        /// <summary>
-        /// Devuelve la lista de props asignados.
-        /// </summary>
+        /// <summary>Devuelve la lista de props asignados.</summary>
         public PropsRoom[] Props => prop;
     }
 
@@ -42,10 +38,8 @@ namespace ScriptableObjects
     {
         [Tooltip("Nombre identificador del prop (solo informativo).")]
         public string propName;
-
         [Tooltip("Color que representa este prop en la textura de plantilla.")]
         public Color propColor;
-
         [Tooltip("Prefab que se instanciará cuando se detecte este color en la plantilla.")]
         public GameObject propPrefab;
     }

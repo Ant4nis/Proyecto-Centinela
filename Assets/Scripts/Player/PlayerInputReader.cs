@@ -31,7 +31,12 @@ namespace Player
             _playerWeapon = GetComponentInParent<PlayerWeapon>();
         }
 
-        /// <summary>Se suscribe a la acción de dash del jugador para ejecutar el dash cuando se active la entrada.</summary>
+        /// <summary>
+        /// Se suscribe a las acciones de entrada del jugador:
+        /// 1. Ejecuta el dash cuando se realiza la acción de Dash.
+        /// 2. Inicia el disparo continuo cuando se realiza la acción de Attack [Mantener presionado].
+        /// 3. Detiene el disparo continuo cuando se cancela la acción de Attack [Soltar tecla].
+        /// </summary>
         private void Start()
         {
             _playerActions.Player.Dash.performed += _ => _playerMovement.Dash();

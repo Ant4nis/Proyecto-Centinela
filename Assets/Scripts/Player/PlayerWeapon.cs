@@ -9,20 +9,26 @@ namespace Player
 {
     /// <summary>
     /// Controlador del arma del jugador.
-    /// 1. Instancia el arma inicial.
-    /// 2. Cambia el sortingOrder de sus sprites según dirección.
-    /// 3. Controla la lógica de ataque con animaciones y tiempo de espera.
+    /// 
+    /// Funciones principales:
+    /// 1. Instancia el arma inicial equipada.
+    /// 2. Controla el ataque y disparo de armas, gestionando animaciones y munición.
+    /// 3. Ajusta el orden de renderizado del arma según la dirección del movimiento del jugador.
     /// </summary>
     public class PlayerWeapon : MonoBehaviour
     {
         [Header("Configuración Inicial")]
+        [Tooltip("Prefab del arma con la que inicia el jugador.")]
         [SerializeField] private Weapon startingWeapon;
+        [Tooltip("Transform donde se instanciará el arma.")]
         [SerializeField] private Transform weaponRotationPos;
 
         [Header("Config Dirección (Solo Sorting)")]
+        [Tooltip("Configuración para aplicar orden de renderizado según dirección.")]
         [SerializeField] private WeaponDirectionConfig directionConfig;
 
         [Header("Datos del arma equipada")]
+        [Tooltip("Datos del arma equipada actualmente (daño, cadencia, tipo).")]
         [SerializeField] private ItemWeapon itemWeapon;
 
         private SpriteRenderer _spriteRendererSprite;
@@ -34,11 +40,14 @@ namespace Player
         private PlayerAmmo _playerAmmo;
 
         private Weapon _currentWeapon;
-        private bool _isAttacking;
         private Coroutine _fireRoutine;
+        private bool _isAttacking;
         private float _lastShootTime = Mathf.NegativeInfinity;
-        
+
+        /// <summary>Arma actual equipada por el jugador.</summary>
         public Weapon CurrentWeapon => _currentWeapon;
+
+        /// <summary>Indica si el jugador está actualmente atacando.</summary>
         public bool IsAttacking => _isAttacking;
 
         private void Awake()
@@ -61,8 +70,9 @@ namespace Player
         }
 
         /// <summary>
-        /// Instancia el arma inicial del jugador y guarda referencias visuales.
+        /// Instancia el arma proporcionada y guarda las referencias visuales.
         /// </summary>
+        /// <param name="weaponPrefab">Prefab del arma a instanciar.</param>
         private void CreateWeapon(Weapon weaponPrefab)
         {
             _currentWeapon = Instantiate(weaponPrefab, weaponRotationPos.position, Quaternion.identity, weaponRotationPos);
@@ -72,88 +82,97 @@ namespace Player
             if (_spriteRendererSprite == null || _spriteRendererAmmo == null)
                 Debug.LogWarning("No se encontraron los SpriteRenderers del arma.");
         }
-        
+
+        /// <summary>
+        /// Inicia el disparo continuo si hay munición disponible.
+        /// </summary>
         public void StartFiring()
         {
             if (_fireRoutine != null) return;
+            
             if (WeaponWithAmmo() == false) return;
 
-            _playerAnimationController.SetAttacking(true); // <-- aquí empieza la animación una sola vez
+            _playerAnimationController.SetAttacking(true);
             _fireRoutine = StartCoroutine(FireContinuously());
         }
 
+        /// <summary>
+        /// Detiene el disparo continuo y resetea la animación de ataque.
+        /// </summary>
         public void StopFiring()
         {
             if (_fireRoutine != null)
             {
                 StopCoroutine(_fireRoutine);
                 _fireRoutine = null;
-                _playerAnimationController.SetAttacking(false); // <-- la param se resetea aquí al soltar botón
+                _playerAnimationController.SetAttacking(false);
             }
         }
 
+        /// <summary>
+        /// Corrutina que intenta disparar continuamente mientras se mantenga el disparo.
+        /// </summary>
         private IEnumerator FireContinuously()
         {
             while (true)
             {
-                ShootWeapon(); // deja que el cooldown lo controle ShootWeapon
-                yield return null; // intentamos cada frame, pero el cooldown lo limita
+                ShootWeapon();
+                yield return null;
             }
-            
         }
 
         /// <summary>
-        /// Lanza un disparo si no se está atacando.
+        /// Lanza un disparo si el arma está lista y hay munición disponible.
+        /// Controla el gasto de munición y el cooldown entre disparos.
         /// </summary>
-        public void ShootWeapon()
+        private void ShootWeapon()
         {
             if (_currentWeapon == null) return;
 
-            // Evita disparar si no ha pasado el tiempo necesario
             if (Time.time < _lastShootTime + itemWeapon.TimeBetweenAttacks) return;
 
             _lastShootTime = Time.time;
-            
+
             _playerAmmo.SpendAmmo(_currentWeapon.ItemWeapon.Ammo);
 
             StartCoroutine(IEShootWeapon());
-            
         }
 
         /// <summary>
-        /// Controla la secuencia de ataque: animación, espera y disparo.
+        /// Controla la secuencia de ataque: reproduce animación y llama al disparo del arma.
         /// </summary>
         private IEnumerator IEShootWeapon()
         {
             _isAttacking = true;
 
-            yield return null; // dejar que la animación mueva el brazo/arma si hace falta
+            yield return null; // Deja margen para animación de ataque (por ejemplo, mover el brazo antes de disparar)
 
             _currentWeapon.Fire();
 
-            yield return new WaitForSeconds(itemWeapon.TimeBetweenAttacks); // opcional
+            yield return new WaitForSeconds(itemWeapon.TimeBetweenAttacks);
 
             _isAttacking = false;
         }
 
+        /// <summary>
+        /// Verifica si el arma puede disparar, en base al tipo de arma y munición disponible.
+        /// </summary>
+        /// <returns>True si puede disparar, False si no tiene munición (en armas a distancia).</returns>
         private bool WeaponWithAmmo()
         {
             if (_currentWeapon.ItemWeapon.Type == WeaponType.Distance && _playerAmmo.HaveAmmo)
-            {
                 return true;
-            }
 
             if (_currentWeapon.ItemWeapon.Type == WeaponType.Melee)
-            {
                 return true;
-            }
-            
+
             return false;
         }
-        
+
         /// <summary>
-        /// Aplica el `sortingOrder` correcto del arma según la dirección de movimiento.
+        /// Actualiza el orden de renderizado del arma en función de la dirección del movimiento.
         /// </summary>
+        /// <param name="direction">Dirección de movimiento del jugador.</param>
         private void UpdateWeaponSorting(Vector2 direction)
         {
             if (direction == Vector2.zero) return;
@@ -170,8 +189,10 @@ namespace Player
         }
 
         /// <summary>
-        /// Devuelve una dirección cardinal aproximada a partir de un vector.
+        /// Convierte una dirección en vector a una dirección cardinal de 8 direcciones.
         /// </summary>
+        /// <param name="input">Vector de dirección.</param>
+        /// <returns>Dirección cardinal aproximada.</returns>
         private Direction8 GetClosestDirection(Vector2 input)
         {
             float angle = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg;

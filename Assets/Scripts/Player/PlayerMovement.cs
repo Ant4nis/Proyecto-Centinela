@@ -34,8 +34,11 @@ namespace Player
         private PlayerInputReader _inputReader;
         private SpriteRenderer _spriteRenderer;
 
+        /// <summary>Indica la velocidad actual del jugador.</summary>
         private float _currentSpeed;
+        /// <summary>Indica si el jugador está realizando un Dash.</summary>
         private bool _isDashing;
+        /// <summary>Indica si el jugador está tocando una pared.</summary>
         private bool _isTouchingWall;
 
         
@@ -45,6 +48,7 @@ namespace Player
         /// </summary>
         public bool IsMoving => _inputReader.MoveInput.magnitude > 0f && !_isTouchingWall;
         
+        /// <summary>Guarda la última dirección de movimiento.</summary>
         public Vector2 LastMoveDirection { get; private set; } = Vector2.down;
 
         /// <summary>

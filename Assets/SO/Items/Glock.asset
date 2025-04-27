@@ -18,7 +18,7 @@ MonoBehaviour:
   HandedWeapon: 0
   Type: 1
   Quality: 0
-  Damage: 1
+  Damage: 100
   TimeBetweenAttacks: 0.5
   MinAccuracy: -3
   MaxAccuracy: 3

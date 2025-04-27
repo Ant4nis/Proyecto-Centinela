@@ -28,11 +28,9 @@ namespace Managers
         [Tooltip("Referencia al Transform del jugador para teletransportarlo.")]
         [SerializeField] private Transform player;
         
-        [Header("Plantillas Generales")]
+        [Header("Plantillas")]
         [Tooltip("Plantilla general para la generación de habitaciones no-puzzle.")]
         [SerializeField] private TemplatesRoom templatesRoom;
-
-        [Header("Plantilla de Puzzle")]
         [Tooltip("ScriptableObject específico para generar salas de tipo puzzle.")]
         [SerializeField] private PuzzleRoomTemplate puzzleRoomTemplate;
 
@@ -40,19 +38,13 @@ namespace Managers
         [Tooltip("Librería con referencias para instanciar puertas dentro del dungeon.")]
         [SerializeField] private DungeonLibrary dungeonLibrary;
         
-        /// <summary>
-        /// Acceso público a la plantilla general de habitaciones.
-        /// </summary>
+        /// <summary>Acceso público a la plantilla general de habitaciones.</summary>
         public TemplatesRoom TemplatesRoom => templatesRoom;
 
-        /// <summary>
-        /// Acceso público a la plantilla específica para habitaciones de tipo puzzle.
-        /// </summary>
+        /// <summary>Acceso público a la plantilla específica para habitaciones de tipo puzzle.</summary>
         public PuzzleRoomTemplate PuzzleRoomTemplate => puzzleRoomTemplate;
 
-        /// <summary>
-        /// Acceso público a la librería de mazmorra con prefabs de puertas y niveles.
-        /// </summary>
+        /// <summary>Acceso público a la librería de mazmorra con prefabs de puertas y niveles.</summary>
         public DungeonLibrary DungeonLibrary => dungeonLibrary;
 
         private int _currentLevelIndex;

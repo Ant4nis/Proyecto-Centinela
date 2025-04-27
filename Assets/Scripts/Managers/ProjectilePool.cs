@@ -14,18 +14,14 @@ namespace Managers
     /// </summary>
     public class ProjectilePool : MonoBehaviour
     {
-        /// <summary>
-        /// Instancia global del pool.
-        /// </summary>
+        /// <summary>Instancia global del pool.</summary>
         public static ProjectilePool Instance;
 
         [Header("Configuración Inicial")]
         [Tooltip("Lista de proyectiles que se gestionarán.")]
         [SerializeField] private List<ProjectilePoolEntry> poolEntries;
 
-        /// <summary>
-        /// Diccionario que mapea cada tipo de proyectil a su cola de objetos disponibles.
-        /// </summary>
+        /// <summary>Diccionario que mapea cada tipo de proyectil a su cola de objetos disponibles.</summary>
         private Dictionary<Projectile, Queue<Projectile>> _poolDictionary;
 
         private void Awake()

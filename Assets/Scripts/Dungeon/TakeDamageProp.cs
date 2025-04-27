@@ -12,7 +12,7 @@ namespace Dungeon
     /// 1. TakeDamage(float damage)
     /// 2. RestoreHealth(float health)
     /// </summary>
-    public class DamageableProp : MonoBehaviour, IDamageable
+    public class TakeDamageProp : MonoBehaviour, ITakeDamage
     {
         [Header("Stats de Salud")]
         [Tooltip("Salud máxima de este prop.")]

@@ -13,18 +13,18 @@ namespace Interfaces
     /// 1. Tomar daño con TakeDamage.
     /// 2. Restaurar salud con RestoreHealth.
     /// </summary>
-    public interface IDamageable
+    public interface ITakeDamage
     {
         /// <summary>
         /// Aplica daño a la entidad.
         /// </summary>
         /// <param name="damage">Cantidad de daño a aplicar.</param>
-        void TakeDamage(float damage);
+        public void TakeDamage(float damage);
 
         /// <summary>
         /// Restaura salud a la entidad.
         /// </summary>
         /// <param name="health">Cantidad de salud a restaurar.</param>
-        void RestoreHealth(float health);
+        public void RestoreHealth(float health);
     }
 }
