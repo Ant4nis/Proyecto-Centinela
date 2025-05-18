@@ -19,7 +19,7 @@ MonoBehaviour:
   MaxHealth: 10
   CurrentArmor: 5
   MaxArmor: 5
-  CurrentAmmo: 200
+  CurrentAmmo: 43
   MaxAmmo: 200
   CriticalChance: 10
   CriticalDamage: 30

@@ -51,7 +51,7 @@ namespace InputSystem
                     ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""6c2ab1b8-8984-453a-af3d-a3c78ae1679a"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -69,7 +69,7 @@ namespace InputSystem
                     ""name"": ""Crouch"",
                     ""type"": ""Button"",
                     ""id"": ""27c5f898-bc57-4ee1-8800-db469aca5fe3"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -96,6 +96,15 @@ namespace InputSystem
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""641cd816-40e6-41b4-8c3d-04687c349290"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""db726bf6-71eb-4545-a398-c3930425919e"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -452,6 +461,17 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4390fbd-f5f9-4d08-9237-5cb64080ee55"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ChangeWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1047,6 +1067,7 @@ namespace InputSystem
             m_Player_Previous = m_Player.FindAction("Previous", throwIfNotFound: true);
             m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
             m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+            m_Player_ChangeWeapon = m_Player.FindAction("ChangeWeapon", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1134,6 +1155,7 @@ namespace InputSystem
         private readonly InputAction m_Player_Previous;
         private readonly InputAction m_Player_Next;
         private readonly InputAction m_Player_Dash;
+        private readonly InputAction m_Player_ChangeWeapon;
         public struct PlayerActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1146,6 +1168,7 @@ namespace InputSystem
             public InputAction @Previous => m_Wrapper.m_Player_Previous;
             public InputAction @Next => m_Wrapper.m_Player_Next;
             public InputAction @Dash => m_Wrapper.m_Player_Dash;
+            public InputAction @ChangeWeapon => m_Wrapper.m_Player_ChangeWeapon;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1179,6 +1202,9 @@ namespace InputSystem
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @ChangeWeapon.started += instance.OnChangeWeapon;
+                @ChangeWeapon.performed += instance.OnChangeWeapon;
+                @ChangeWeapon.canceled += instance.OnChangeWeapon;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1207,6 +1233,9 @@ namespace InputSystem
                 @Dash.started -= instance.OnDash;
                 @Dash.performed -= instance.OnDash;
                 @Dash.canceled -= instance.OnDash;
+                @ChangeWeapon.started -= instance.OnChangeWeapon;
+                @ChangeWeapon.performed -= instance.OnChangeWeapon;
+                @ChangeWeapon.canceled -= instance.OnChangeWeapon;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1397,6 +1426,7 @@ namespace InputSystem
             void OnPrevious(InputAction.CallbackContext context);
             void OnNext(InputAction.CallbackContext context);
             void OnDash(InputAction.CallbackContext context);
+            void OnChangeWeapon(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

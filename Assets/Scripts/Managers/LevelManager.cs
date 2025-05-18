@@ -46,7 +46,9 @@ namespace Managers
 
         /// <summary>Acceso público a la librería de mazmorra con prefabs de puertas y niveles.</summary>
         public DungeonLibrary DungeonLibrary => dungeonLibrary;
-
+        
+        public Transform Player => player;
+        
         private int _currentLevelIndex;
         private int _currentDungeonIndex;
         private GameObject _currentDungeonGO;

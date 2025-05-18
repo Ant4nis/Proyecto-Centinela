@@ -43,6 +43,7 @@ namespace Player
             _playerActions.Player.Dash.performed += _ => _playerMovement.Dash();
             _playerActions.Player.Attack.performed += _ => _playerWeapon.StartFiring();
             _playerActions.Player.Attack.canceled += _ => _playerWeapon.StopFiring();
+            _playerActions.Player.ChangeWeapon.performed += _ => _playerWeapon.ChangeWeapon();
         }
         
         private void Update()
@@ -66,6 +67,7 @@ namespace Player
         private void OnDisable()
         {
             _playerActions.Disable();
+
         }
     }
 }

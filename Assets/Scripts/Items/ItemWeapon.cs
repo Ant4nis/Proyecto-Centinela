@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using Items.Weapons;
+using Managers;
+using Player;
+using UnityEngine;
 
 /// <summary>Enumeración que define si un arma es de una mano o de dos manos.</summary>
 public enum HandedWeapon
@@ -55,9 +58,12 @@ namespace Items
         [Tooltip("Cantidad de munición consumida por disparo (solo para armas de distancia).")]
         public float Ammo;
 
+        [Header("Weapon")] 
+        public Weapon WeaponPrefab;
+        
         public override void Take()
         {
-            Debug.Log("Taking item");
+            LevelManager.Instance.Player.GetComponent<PlayerWeapon>().EquipWeapon(WeaponPrefab);
         }
     }
 }

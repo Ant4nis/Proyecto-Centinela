@@ -18,8 +18,8 @@ namespace Player
     public class PlayerWeapon : MonoBehaviour
     {
         [Header("Configuración Inicial")]
-        [Tooltip("Prefab del arma con la que inicia el jugador.")]
-        [SerializeField] private Weapon startingWeapon;
+        //[Tooltip("Prefab del arma con la que inicia el jugador.")]
+        //[SerializeField] private Weapon startingWeapon;
         [Tooltip("Transform donde se instanciará el arma.")]
         [SerializeField] private Transform weaponRotationPos;
 
@@ -63,7 +63,6 @@ namespace Player
 
         private void Start()
         {
-            CreateWeapon(startingWeapon);
         }
 
         private void Update()
@@ -78,13 +77,14 @@ namespace Player
         /// <param name="weaponPrefab">Prefab del arma a instanciar.</param>
         private void CreateWeapon(Weapon weaponPrefab)
         {
-            _currentWeapon = Instantiate(weaponPrefab, weaponRotationPos.position, Quaternion.identity, weaponRotationPos);
+            _currentWeapon = Instantiate(weaponPrefab, weaponRotationPos.position, weaponRotationPos.rotation, weaponRotationPos);
             _spriteRendererSprite = _currentWeapon.transform.Find("Sprite")?.GetComponent<SpriteRenderer>();
             _spriteRendererAmmo = _currentWeapon.transform.Find("Ammo")?.GetComponent<SpriteRenderer>();
             _equippedWeapons[_indexWeapon] = _currentWeapon;
             
             if (_spriteRendererSprite == null || _spriteRendererAmmo == null)
                 Debug.LogWarning("No se encontraron los SpriteRenderers del arma.");
+            
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Player
         public void StartFiring()
         {
             if (_fireRoutine != null) return;
-            
+            if (_currentWeapon == null) return;
             if (WeaponWithAmmo() == false) return;
 
             _playerAnimationController.SetAttacking(true);
@@ -173,15 +173,54 @@ namespace Player
             return false;
         }
 
-        private void EquipWeapon(Weapon weapon)
+        public void EquipWeapon(Weapon weapon)
         {
             if (_equippedWeapons[0] == null)
             {
                 CreateWeapon(weapon);
+                itemWeapon = _currentWeapon.ItemWeapon;
+                return;
+            }
+
+            if (_equippedWeapons[1] == null)
+            {
+                _indexWeapon++;
+                _equippedWeapons[0].gameObject.SetActive(false);
+                CreateWeapon(weapon);
+                itemWeapon = _currentWeapon.ItemWeapon;
                 return;
             }
             
-            
+            Destroy(_currentWeapon.gameObject);
+            _equippedWeapons[_indexWeapon] = null;
+            CreateWeapon(weapon);
+        }
+
+        public void ChangeWeapon()
+        {
+            Debug.Log("antes del if");
+            if (_equippedWeapons[1] == null) return;
+            Debug.Log("despues del if");
+
+            // Desactivar todas las armas y limpiar referencias
+            for (int i = 0; i < _equippedWeapons.Length; i++)
+            {
+                if (_equippedWeapons[i] != null)
+                {
+                    _equippedWeapons[i].gameObject.SetActive(false);
+                }
+            }
+    
+            // Alternar 0-1 
+            _indexWeapon = 1 - _indexWeapon;
+            _currentWeapon = _equippedWeapons[_indexWeapon];
+            _currentWeapon.gameObject.SetActive(true);
+
+            // 🔄 Solo actualizar el arma activa
+            _spriteRendererSprite = _currentWeapon.transform.Find("Sprite")?.GetComponent<SpriteRenderer>();
+            _spriteRendererAmmo = _currentWeapon.transform.Find("Ammo")?.GetComponent<SpriteRenderer>();
+
+            Debug.Log($"Arma cambiada a: {_currentWeapon.name}");
         }
         
         /// <summary>
@@ -190,7 +229,9 @@ namespace Player
         /// <param name="direction">Dirección de movimiento del jugador.</param>
         private void UpdateWeaponSorting(Vector2 direction)
         {
-            if (direction == Vector2.zero) return;
+            
+            if (direction == Vector2.zero || _currentWeapon == null) return;
+            if (!_currentWeapon.gameObject.activeSelf) return; // 🔍 Validación extra
 
             var dirEnum = GetClosestDirection(direction.normalized);
             var config = directionConfig.GetSettingsFor(dirEnum);

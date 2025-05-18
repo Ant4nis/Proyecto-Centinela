@@ -23,3 +23,4 @@ MonoBehaviour:
   MinAccuracy: -3
   MaxAccuracy: 3
   Ammo: 1
+  WeaponPrefab: {fileID: -8470270119662325447, guid: 4271c1923a0e16145a6f1f918e2dc4a4, type: 3}
