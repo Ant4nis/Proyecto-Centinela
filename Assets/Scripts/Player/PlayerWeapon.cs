@@ -44,6 +44,9 @@ namespace Player
         private bool _isAttacking;
         private float _lastShootTime = Mathf.NegativeInfinity;
 
+        private int _indexWeapon; // para cambiar entre armas
+        private Weapon[] _equippedWeapons = new Weapon[2]; // max dos armas equipadas
+
         /// <summary>Arma actual equipada por el jugador.</summary>
         public Weapon CurrentWeapon => _currentWeapon;
 
@@ -78,7 +81,8 @@ namespace Player
             _currentWeapon = Instantiate(weaponPrefab, weaponRotationPos.position, Quaternion.identity, weaponRotationPos);
             _spriteRendererSprite = _currentWeapon.transform.Find("Sprite")?.GetComponent<SpriteRenderer>();
             _spriteRendererAmmo = _currentWeapon.transform.Find("Ammo")?.GetComponent<SpriteRenderer>();
-
+            _equippedWeapons[_indexWeapon] = _currentWeapon;
+            
             if (_spriteRendererSprite == null || _spriteRendererAmmo == null)
                 Debug.LogWarning("No se encontraron los SpriteRenderers del arma.");
         }
@@ -169,6 +173,17 @@ namespace Player
             return false;
         }
 
+        private void EquipWeapon(Weapon weapon)
+        {
+            if (_equippedWeapons[0] == null)
+            {
+                CreateWeapon(weapon);
+                return;
+            }
+            
+            
+        }
+        
         /// <summary>
         /// Actualiza el orden de renderizado del arma en función de la dirección del movimiento.
         /// </summary>

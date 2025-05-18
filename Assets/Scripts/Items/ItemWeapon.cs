@@ -54,5 +54,10 @@ namespace Items
         public float MaxAccuracy;
         [Tooltip("Cantidad de munición consumida por disparo (solo para armas de distancia).")]
         public float Ammo;
+
+        public override void Take()
+        {
+            Debug.Log("Taking item");
+        }
     }
 }

@@ -15,5 +15,10 @@ namespace Items
         public string Name;
         [Tooltip("Icono del item")]
         public Sprite Icon;
+
+        public virtual void Take()
+        {
+            
+        } 
     }
 }

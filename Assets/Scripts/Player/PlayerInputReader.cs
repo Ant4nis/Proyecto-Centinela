@@ -15,6 +15,7 @@ namespace Player
     /// </summary>
     public class PlayerInputReader : MonoBehaviour
     {
+        
         // Acciones de entrada del jugador generadas por el sistema de InputActions.
         private PlayerInputActions _playerActions;
         // Referencia al componente de movimiento del jugador para invocar el dash.
