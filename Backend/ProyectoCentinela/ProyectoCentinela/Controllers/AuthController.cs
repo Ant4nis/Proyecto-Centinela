@@ -86,6 +86,32 @@ namespace ProyectoCentinela.Controllers
         
             return Ok(new { mensaje = "Usuario registrado correctamente.", rol = rol.Nombre });
         }
+        
+        /// <summary>
+        /// Inicia sesión validando el email y la contraseña del usuario.
+        /// </summary>
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UsuarioLoginDTO credenciales)
+        {
+            // Buscar usuario por email
+            var usuario = await _context.Usuarios
+                .Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.Email == credenciales.Email);
 
+            // Validar existencia y coincidencia de contraseña (sin hash de momento)
+            if (usuario == null || usuario.ContrasenaHash != credenciales.Contrasena)
+            {
+                return Unauthorized(new { mensaje = "Credenciales incorrectas" });
+            }
+
+            // Devolver información relevante para Unity
+            return Ok(new
+            {
+                id = usuario.Id,
+                nombre = usuario.NombreUsuario,
+                rol = usuario.Rol.Nombre,
+                mensaje = "Inicio de sesión exitoso"
+            });
+        }
     }
 }
