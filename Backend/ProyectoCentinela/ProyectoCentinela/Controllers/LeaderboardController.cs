@@ -16,6 +16,41 @@ namespace ProyectoCentinela.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Devuelve una entrada por usuario (aunque no tenga puntuación registrada).
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetLeaderboardCompleto()
+        {
+            var leaderboard = await _context.Usuarios
+                .Include(u => u.Rol)
+                .GroupJoin(
+                    _context.Leaderboards,
+                    usuario => usuario.Id,
+                    lb => lb.UsuarioId,
+                    (usuario, puntuaciones) => new
+                    {
+                        Usuario = usuario,
+                        Entrada = puntuaciones.OrderByDescending(p => p.Fecha).FirstOrDefault()
+                    }
+                )
+                .Select(x => new
+                {
+                    Id = x.Usuario.Id,
+                    NombreUsuario = x.Usuario.NombreUsuario,
+                    Rol = x.Usuario.Rol.Nombre,
+                    Puntuacion = x.Entrada != null ? x.Entrada.Puntuacion : 0,
+                    Nivel = x.Entrada != null ? x.Entrada.Nivel : "Sin datos",
+                    Fecha = x.Entrada != null ? x.Entrada.Fecha : DateTime.MinValue
+                })
+                .ToListAsync();
+
+            return Ok(leaderboard);
+        }
+
+        /// <summary>
+        /// Elimina una entrada de leaderboard por ID.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLeaderboard(int id)
         {
@@ -24,13 +59,11 @@ namespace ProyectoCentinela.Controllers
             if (leaderboard == null)
                 return NotFound(new { mensaje = "Registro en Leaderboard no encontrado" });
 
-            // ✅ Eliminar el registro de leaderboard
             _context.Leaderboards.Remove(leaderboard);
             await _context.SaveChangesAsync();
 
-            // ✅ Ajustar el valor del AUTO_INCREMENT
             var maxId = await _context.Leaderboards.MaxAsync(l => (int?)l.Id) ?? 0;
-            maxId++; // Siguiente ID disponible
+            maxId++;
             await _context.Database.ExecuteSqlRawAsync($"ALTER TABLE leaderboard AUTO_INCREMENT = {maxId}");
 
             return Ok(new { mensaje = "Registro en Leaderboard eliminado correctamente" });

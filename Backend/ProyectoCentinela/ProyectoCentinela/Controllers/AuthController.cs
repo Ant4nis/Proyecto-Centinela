@@ -104,14 +104,48 @@ namespace ProyectoCentinela.Controllers
                 return Unauthorized(new { mensaje = "Credenciales incorrectas" });
             }
 
+            // ✅ Obtener IP de la petición
+            string ip = ObtenerIp();
+            
+            // ✅ Verificar si ya existe una sesión para este usuario
+            var sesion = await _context.Sesiones.FirstOrDefaultAsync(s => s.UsuarioId == usuario.Id);
+
+            if (sesion != null)
+            {
+                sesion.UltimaConexion = DateTime.Now;
+                sesion.Ip = ip;
+            }
+            else
+            {
+                sesion = new Sesion
+                {
+                    UsuarioId = usuario.Id,
+                    UltimaConexion = DateTime.Now,
+                    Ip = ip
+                };
+                _context.Sesiones.Add(sesion);
+            }
+
+            await _context.SaveChangesAsync();
+
             // Devolver información relevante para Unity
             return Ok(new
             {
                 id = usuario.Id,
                 nombre = usuario.NombreUsuario,
                 rol = usuario.Rol.Nombre,
+                rolId = usuario.RolId, 
                 mensaje = "Inicio de sesión exitoso"
             });
+        }
+        
+        /// <summary>
+        /// Obtiene la dirección IP del cliente, traduciendo "::1" a "localhost".
+        /// </summary>
+        private string ObtenerIp()
+        {
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Desconocida";
+            return ip == "::1" ? "localhost" : ip;
         }
     }
 }

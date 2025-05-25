@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoCentinela.Data;
 using ProyectoCentinela.Models;
+using ProyectoCentinela.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace ProyectoCentinela.Controllers
@@ -16,6 +17,33 @@ namespace ProyectoCentinela.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Devuelve todas las sesiones con el nombre del usuario asociado.
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetAllSesiones()
+        {
+            var sesiones = await _context.Sesiones
+                .Include(s => s.Usuario)
+                .AsNoTracking() // IMPORTANTE: evita cacheo en memoria
+                .OrderByDescending(s => s.UltimaConexion)
+                .Select(s => new
+                {
+                    s.Id,
+                    UsuarioId = s.UsuarioId,
+                    Usuario = s.Usuario.NombreUsuario,
+                    s.UltimaConexion,
+                    s.Ip
+                })
+                .ToListAsync();
+
+            return Ok(sesiones);
+        }
+
+
+        /// <summary>
+        /// Elimina una sesión por su ID.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSesion(int id)
         {
@@ -24,13 +52,11 @@ namespace ProyectoCentinela.Controllers
             if (sesion == null)
                 return NotFound(new { mensaje = "Sesión no encontrada" });
 
-            // ✅ Eliminar la sesión
             _context.Sesiones.Remove(sesion);
             await _context.SaveChangesAsync();
 
-            // ✅ Ajustar el valor del AUTO_INCREMENT
             var maxId = await _context.Sesiones.MaxAsync(s => (int?)s.Id) ?? 0;
-            maxId++; // Siguiente ID disponible
+            maxId++;
             await _context.Database.ExecuteSqlRawAsync($"ALTER TABLE sesion AUTO_INCREMENT = {maxId}");
 
             return Ok(new { mensaje = "Sesión eliminada correctamente" });

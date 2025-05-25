@@ -106,7 +106,7 @@ namespace ProyectoCentinela.Controllers
                 return BadRequest(new { mensaje = "El ID del usuario no coincide." });
             }
 
-            //  Obtenemos el usuario existente
+            // Obtenemos el usuario existente
             var usuarioExistente = await _context.Usuarios
                 .Include(u => u.Rol)
                 .Include(u => u.Sesiones)
@@ -118,19 +118,26 @@ namespace ProyectoCentinela.Controllers
                 return NotFound(new { mensaje = "Usuario no encontrado." });
             }
 
-            //  Actualizamos los datos básicos
+            // Actualizamos los datos básicos
             usuarioExistente.NombreUsuario = usuarioActualizado.NombreUsuario;
             usuarioExistente.Email = usuarioActualizado.Email;
             usuarioExistente.ContrasenaHash = usuarioActualizado.ContrasenaHash;
             usuarioExistente.RolId = usuarioActualizado.RolId;
 
-            // las relaciones para que Swagger no se queje
-            usuarioExistente.Sesiones = new List<Sesion>();
-            usuarioExistente.Leaderboards = new List<Leaderboard>();
-
             try
             {
                 await _context.SaveChangesAsync();
+
+                // Recargamos las sesiones relacionadas para reflejar los nuevos datos en la navegación inversa
+                var sesionesRelacionadas = await _context.Sesiones
+                    .Where(s => s.UsuarioId == usuarioExistente.Id)
+                    .ToListAsync();
+
+                foreach (var sesion in sesionesRelacionadas)
+                {
+                    _context.Entry(sesion).Reference(s => s.Usuario).Load();
+                }
+
                 return Ok(new { mensaje = "Usuario actualizado correctamente." });
             }
             catch (DbUpdateConcurrencyException)
@@ -140,31 +147,6 @@ namespace ProyectoCentinela.Controllers
 
                 throw;
             }
-        }
-
-
-        /// <summary>
-        /// Eliminar un usuario por su ID.
-        /// </summary>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsuario(int id)
-        {
-            var usuario = await _context.Usuarios.FindAsync(id);
-
-            if (usuario == null)
-                return NotFound(new { mensaje = "Usuario no encontrado" });
-
-            // ✅ 1️⃣ Eliminar el usuario
-            _context.Usuarios.Remove(usuario);
-            await _context.SaveChangesAsync();
-
-            // ✅ 2️⃣ Ajustar el valor del AUTO_INCREMENT
-            // Esto actualiza el contador para que el próximo ID sea el correcto.
-            var maxId = await _context.Usuarios.MaxAsync(u => (int?)u.Id) ?? 0;
-            maxId++; // Siguiente ID disponible
-            await _context.Database.ExecuteSqlRawAsync($"ALTER TABLE usuario AUTO_INCREMENT = {maxId}");
-
-            return Ok(new { mensaje = "Usuario eliminado correctamente" });
         }
     }
 }

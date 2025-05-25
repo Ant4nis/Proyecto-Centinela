@@ -42,7 +42,7 @@ namespace ProyectoCentinela.Models
         /// </summary>
         [Required]
         [MaxLength(255)]
-        [Column("contraseña_hash")]
+        [Column("contrasena_hash")]
         public string ContrasenaHash { get; set; }
 
         /// <summary>

@@ -1,5 +1,8 @@
 ﻿using System.Collections;
+using Managers;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UIForms
 {
@@ -75,17 +78,19 @@ namespace UIForms
                 // Guardar sesión activa
                 UsuarioSesion.Instancia.Id = respuesta.id;
                 UsuarioSesion.Instancia.Nombre = respuesta.nombre;
+                UsuarioSesion.Instancia.Email = email;
                 UsuarioSesion.Instancia.Rol = respuesta.rol;
+                UsuarioSesion.Instancia.Password = contrasena;
+                UsuarioSesion.Instancia.RolId = respuesta.rolId;
 
                 Debug.Log("✅ Login exitoso. Rol: " + respuesta.rol);
 
-                // Aquí puedes cargar otra escena o mostrar paneles según rol
-                // Ejemplo:
-                // SceneManager.LoadScene("MenuPrincipal");
+                FadeController.Instance.FadeOutAndLoadScene("MainMenuScene");
+                
             }
             else
             {
-                ShowError("❌ Error de login o conexión.");
+                ShowError("Error de login o conexión.");
                 Debug.LogWarning(request.downloadHandler.text);
             }
         }
@@ -103,6 +108,7 @@ namespace UIForms
             public int id;
             public string nombre;
             public string rol;
+            public int rolId; 
         }
 
     }
