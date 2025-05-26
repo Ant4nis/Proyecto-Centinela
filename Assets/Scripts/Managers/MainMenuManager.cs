@@ -65,6 +65,12 @@ namespace Managers
             }
         }
 
+        public void HideProfile()
+        {
+            if (perfilPanel != null) perfilPanel.SetActive(false);
+            if (originPanel != null) originPanel.SetActive(true);
+        }
+        
         /// <summary>
         /// Muestra el panel original y oculta el destino (volver atrás).
         /// </summary>

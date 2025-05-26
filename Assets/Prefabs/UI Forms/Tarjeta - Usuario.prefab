@@ -332,6 +332,7 @@ MonoBehaviour:
   FechaTMP: {fileID: 8702601940451410905}
   IpTMP: {fileID: 4947118294508072699}
   EstadoIcon: {fileID: 2908820071233673343}
+  selectButton: {fileID: 7777115820676417735}
 --- !u!114 &7777115820676417735
 MonoBehaviour:
   m_ObjectHideFlags: 0

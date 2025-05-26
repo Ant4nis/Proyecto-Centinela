@@ -18,10 +18,8 @@ namespace ProyectoCentinela.DTOs
         [MaxLength(100)]
         public string Email { get; set; }
 
-        [Required]
-        [MaxLength(255)]
-        public string ContrasenaHash { get; set; }
-
+        public string? ContrasenaHash { get; set; }
+        
         [Required]
         public int RolId { get; set; }
     }

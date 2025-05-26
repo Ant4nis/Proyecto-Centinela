@@ -96,6 +96,28 @@ namespace ProyectoCentinela.Controllers
         }
         
         /// <summary>
+        /// Eliminar un usuario por su ID.
+        /// </summary>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsuario(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario == null)
+                return NotFound(new { mensaje = "Usuario no encontrado" });
+
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+
+            // Opcional: ajustar auto-increment
+            var maxId = await _context.Usuarios.MaxAsync(u => (int?)u.Id) ?? 0;
+            maxId++;
+            await _context.Database.ExecuteSqlRawAsync($"ALTER TABLE usuario AUTO_INCREMENT = {maxId}");
+
+            return Ok(new { mensaje = "Usuario eliminado correctamente" });
+        }
+
+        /// <summary>
         /// Actualizar un usuario existente.
         /// </summary>
         [HttpPut("{id}")]
@@ -121,7 +143,10 @@ namespace ProyectoCentinela.Controllers
             // Actualizamos los datos básicos
             usuarioExistente.NombreUsuario = usuarioActualizado.NombreUsuario;
             usuarioExistente.Email = usuarioActualizado.Email;
-            usuarioExistente.ContrasenaHash = usuarioActualizado.ContrasenaHash;
+            if (!string.IsNullOrWhiteSpace(usuarioActualizado.ContrasenaHash))
+            {
+                usuarioExistente.ContrasenaHash = usuarioActualizado.ContrasenaHash;
+            }
             usuarioExistente.RolId = usuarioActualizado.RolId;
 
             try
@@ -147,6 +172,7 @@ namespace ProyectoCentinela.Controllers
 
                 throw;
             }
+            
         }
     }
 }

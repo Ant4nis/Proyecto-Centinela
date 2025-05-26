@@ -52,11 +52,11 @@ namespace Managers
                 {
                     SesionItem nuevaTarjeta = Instantiate(tarjetaPrefab, contentTransform);
 
-                    nuevaTarjeta.NombreTMP.text = 
-                        sesion.usuarioId == UsuarioSesion.Instancia.Id 
-                            ? UsuarioSesion.Instancia.Nombre 
+                    nuevaTarjeta.NombreTMP.text =
+                        sesion.usuarioId == UsuarioSesion.Instancia.Id
+                            ? UsuarioSesion.Instancia.Nombre
                             : sesion.usuario;
-                    
+
                     if (DateTime.TryParse(sesion.ultimaConexion, out var fecha))
                     {
                         nuevaTarjeta.FechaTMP.text = fecha.ToString("dd/MM/yyyy HH:mm");
@@ -64,10 +64,15 @@ namespace Managers
                     else
                     {
                         nuevaTarjeta.FechaTMP.text = "-";
-                    }                    nuevaTarjeta.IpTMP.text = sesion.ip;
+                    }
+
+                    nuevaTarjeta.IpTMP.text = sesion.ip;
 
                     bool esUsuarioActual = sesion.usuarioId == UsuarioSesion.Instancia.Id;
                     nuevaTarjeta.EstadoIcon.color = esUsuarioActual ? colorConectado : colorDesconectado;
+
+                    // Inicializa la tarjeta con los datos del usuario
+                    nuevaTarjeta.Inicializar(sesion.usuarioId, sesion.usuario);
                 }
             }
             else
@@ -90,7 +95,7 @@ namespace Managers
             // Llama de nuevo a la API
             StartCoroutine(ObtenerSesionesDesdeAPI());
         }
-        
+
         /// <summary>
         /// Estructura que representa una sesión individual.
         /// </summary>
@@ -98,12 +103,11 @@ namespace Managers
         private class SesionDTO
         {
             public int id;
-            public int usuarioId; 
+            public int usuarioId;
             public string usuario;
             public string ultimaConexion;
             public string ip;
         }
-
 
         /// <summary>
         /// Wrapper para deserializar el array de sesiones.

@@ -336,6 +336,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1666383849}
     m_Modifications:
+    - target: {fileID: 571508429283613412, guid: cc92029df120a3544b74dc76a457e21f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 989375218}
+    - target: {fileID: 571508429283613412, guid: cc92029df120a3544b74dc76a457e21f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Validar
+      objectReference: {fileID: 0}
+    - target: {fileID: 571508429283613412, guid: cc92029df120a3544b74dc76a457e21f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UIForms.RegisterValidator, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1004823743867267112, guid: cc92029df120a3544b74dc76a457e21f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1004823743867267112, guid: cc92029df120a3544b74dc76a457e21f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1004823743867267112, guid: cc92029df120a3544b74dc76a457e21f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1004823743867267112, guid: cc92029df120a3544b74dc76a457e21f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1123766509430607834, guid: cc92029df120a3544b74dc76a457e21f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
