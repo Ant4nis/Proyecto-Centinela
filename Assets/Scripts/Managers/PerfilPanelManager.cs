@@ -28,14 +28,17 @@ namespace Managers
         [SerializeField] private TMP_Text errorText;
 
         private int usuarioEditadoId;
+        private static int respaldoIdEditado; //  Se mantiene entre activaciones
+
         public int UsuarioEditadoId
         {
-            get => usuarioEditadoId;
+            get => usuarioEditadoId != 0 ? usuarioEditadoId : respaldoIdEditado;
             set
             {
-                Debug.Log($"🛡 SET UsuarioEditadoId ← {value} (desde {new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().Name})");
-
                 usuarioEditadoId = value;
+                respaldoIdEditado = value;
+
+                Debug.Log($"🛡 SET UsuarioEditadoId ← {value} (desde {new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().Name})");
             }
         }
         
@@ -53,6 +56,51 @@ namespace Managers
             }
         }
 
+        public void AskDeleteConfirmation()
+        {
+            if (confirmDeleteButton != null)
+                confirmDeleteButton.SetActive(true);
+        }
+
+        public void ConfirmDelete()
+        {
+            Debug.Log("🗑 Ejecutando ConfirmDelete()");
+
+            StartCoroutine(SendDeleteRequest());
+        }
+        
+        private IEnumerator SendDeleteRequest()
+        {
+            string url = $"http://localhost:5000/api/usuario/{UsuarioEditadoId}";
+            using var request = UnityWebRequest.Delete(url);
+            request.downloadHandler = new DownloadHandlerBuffer();
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log($"✅ Cuenta con ID={UsuarioEditadoId} eliminada correctamente.");
+
+                if (UsuarioEditadoId == UsuarioSesion.Instancia.Id)
+                {
+                    Debug.Log("Usuario eliminado era el actual. Limpiando sesión y volviendo al login.");
+                    UsuarioSesion.Instancia.Reset();
+                    SceneManager.LoadScene("LoginScene");
+                }
+                else
+                {
+                    Debug.Log("Usuario eliminado era otro. Cerrando panel de perfil.");
+                    mainMenuPanel.SetActive(true);
+                    profilePanel.SetActive(false);
+                }
+            }
+            else
+            {
+                Debug.LogWarning(request.downloadHandler.text);
+                errorText.text = "Error al eliminar la cuenta.";
+            }
+        }
+        
         public void SubmitEdit()
         {
             StartCoroutine(SendEditRequest());
@@ -62,11 +110,11 @@ namespace Managers
         {
             errorText.text = "";
 
-            Debug.Log($"📌 Verificación antes de PUT: UsuarioEditadoId = {UsuarioEditadoId}");
+            Debug.Log($"Verificación antes de PUT: UsuarioEditadoId = {UsuarioEditadoId}");
             if (UsuarioEditadoId <= 0)
             {
                 errorText.text = "Error: no se ha definido correctamente el usuario a editar.";
-                Debug.LogError("❌ usuarioEditadoId no válido en SubmitEdit()");
+                Debug.LogError("usuarioEditadoId no válido en SubmitEdit()");
                 yield break;
             }
 
@@ -113,7 +161,7 @@ namespace Managers
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("✅ Usuario modificado correctamente.");
+                Debug.Log("Usuario modificado correctamente.");
 
                 if (UsuarioEditadoId == UsuarioSesion.Instancia.Id)
                 {
@@ -219,7 +267,7 @@ namespace Managers
 
             if (UsuarioEditadoId <= 0)
             {
-                Debug.LogError("❌ ID del usuario inválido.");
+                Debug.LogError("ID del usuario inválido.");
                 errorText.text = "Error interno: ID no válido.";
                 return;
             }

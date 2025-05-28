@@ -20,6 +20,9 @@ namespace Managers
         [Tooltip("Este panel se activará cuando se pulse perfil.")]
         [SerializeField] private GameObject perfilPanel;
         
+        [Tooltip("Este panel se activará cuando se pulse Leaderboard.")]
+        [SerializeField] private GameObject leaderboardPanel;
+        
         [Header("Panel exclusivo para administradores")]
         [Tooltip("Este panel se ocultará si el usuario no tiene rol de administrador.")]
         [SerializeField] private GameObject adminOnlyPanel;
@@ -77,6 +80,7 @@ namespace Managers
         public void RevertPanels()
         {
             if (targetPanel != null) targetPanel.SetActive(false);
+            if (leaderboardPanel != null) targetPanel.SetActive(false);
             if (originPanel != null) originPanel.SetActive(true);
         }
 
@@ -86,5 +90,18 @@ namespace Managers
             if (perfilPanel != null) perfilPanel.SetActive(true);
             
         }
+
+        public void ShowLeaderboard()
+        {
+            if (originPanel != null) originPanel.SetActive(false);
+            if (leaderboardPanel != null) leaderboardPanel.SetActive(true);
+        }
+
+        public void HideLeaderboard()
+        {
+            if (leaderboardPanel != null) leaderboardPanel.SetActive(false);
+            if (originPanel != null) originPanel.SetActive(true);
+        }
+        
     }
 }

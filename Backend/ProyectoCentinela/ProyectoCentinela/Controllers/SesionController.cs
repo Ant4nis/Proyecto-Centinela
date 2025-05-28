@@ -18,26 +18,49 @@ namespace ProyectoCentinela.Controllers
         }
 
         /// <summary>
-        /// Devuelve todas las sesiones con el nombre del usuario asociado.
+        /// Devuelve todas las sesiones, incluyendo usuarios que nunca iniciaron sesión.
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAllSesiones()
         {
-            var sesiones = await _context.Sesiones
-                .Include(s => s.Usuario)
-                .AsNoTracking() // IMPORTANTE: evita cacheo en memoria
-                .OrderByDescending(s => s.UltimaConexion)
-                .Select(s => new
+            // ✅ Intentamos obtener el ID del usuario actual desde cabecera, pero sin petar si no existe
+            string idStr = Request.Headers["UsuarioActualId"];
+            int idUsuarioActual = 0;
+            if (!string.IsNullOrEmpty(idStr))
+                int.TryParse(idStr, out idUsuarioActual);
+
+            // ✅ Cargamos todos los usuarios junto con sus sesiones (puedan tener 0 o más)
+            var sesiones = await _context.Usuarios
+                .Include(u => u.Sesiones)
+                .AsNoTracking()
+                .Select(u => new
                 {
-                    s.Id,
-                    UsuarioId = s.UsuarioId,
-                    Usuario = s.Usuario.NombreUsuario,
-                    s.UltimaConexion,
-                    s.Ip
+                    Id = u.Sesiones.OrderByDescending(s => s.UltimaConexion).Select(s => s.Id).FirstOrDefault(),
+                    UsuarioId = u.Id,
+                    Usuario = u.NombreUsuario,
+                    UltimaConexion = u.Sesiones.Any()
+                        ? u.Sesiones.OrderByDescending(s => s.UltimaConexion).First().UltimaConexion.ToString("dd/MM/yyyy HH:mm")
+                        : "-",
+                    Ip = u.Sesiones.Any()
+                        ? u.Sesiones.OrderByDescending(s => s.UltimaConexion).First().Ip
+                        : "-",
+                    EsUsuarioActual = u.Id == idUsuarioActual,
+                    TieneSesion = u.Sesiones.Any()
                 })
                 .ToListAsync();
 
-            return Ok(sesiones);
+            //  Orden final:
+            // 1. Usuario actual
+            // 2. Usuarios con sesión
+            // 3. Usuarios sin sesión
+            // Todo ordenado alfabéticamente dentro de cada grupo
+            var ordenados = sesiones
+                .OrderByDescending(s => s.EsUsuarioActual)
+                .ThenByDescending(s => s.TieneSesion)
+                .ThenBy(s => s.Usuario)
+                .ToList();
+
+            return Ok(ordenados);
         }
 
 

@@ -18,5 +18,19 @@
         /// Acceso global a la sesión activa del usuario.
         /// </summary>
         public static UsuarioSesion Instancia => instancia ??= new UsuarioSesion();
+
+        /// <summary>
+        /// Restablece todos los datos de la sesión actual a sus valores por defecto.
+        /// Se utiliza cuando el usuario cierra sesión o se elimina su cuenta.
+        /// </summary>
+        public void Reset()
+        {
+            Id = 0;
+            Nombre = string.Empty;
+            Email = string.Empty;
+            Password = string.Empty;
+            Rol = string.Empty;
+            RolId = 0;
+        }
     }
 }

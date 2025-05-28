@@ -41,8 +41,10 @@ namespace Managers
         {
             using UnityWebRequest request = UnityWebRequest.Get("http://localhost:5000/api/sesion");
             request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("UsuarioActualId", UsuarioSesion.Instancia.Id.ToString());
+            Debug.Log("📡 Enviando ID del usuario actual: " + UsuarioSesion.Instancia.Id); // Opcional para confirmar
             yield return request.SendWebRequest();
-
+            
             if (request.result == UnityWebRequest.Result.Success)
             {
                 string json = "{\"sesiones\":" + request.downloadHandler.text + "}";

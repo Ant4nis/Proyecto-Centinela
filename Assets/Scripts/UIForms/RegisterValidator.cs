@@ -71,15 +71,15 @@ namespace UIForms
 
             yield return request.SendWebRequest();
 
-            if (request.result == UnityWebRequest.Result.Success)
+            if (request.responseCode == 200 || request.responseCode == 201)
             {
                 Debug.Log("Usuario registrado correctamente.");
                 SceneManager.LoadScene("LoginScene");
             }
             else
             {
-                Debug.LogWarning("Registro fallido: " + request.downloadHandler.text);
-                ShowError("No se pudo registrar el usuario.");
+                Debug.LogWarning($"Registro fallido ({request.responseCode}): {request.downloadHandler.text}");
+                ShowError("No se pudo registrar el usuario. " + ExtraerMensaje(request.downloadHandler.text));
             }
         }
 
@@ -89,6 +89,27 @@ namespace UIForms
             return Regex.IsMatch(email, patron);
         }
 
+        private string ExtraerMensaje(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json)) return "";
+
+            try
+            {
+                var wrapper = JsonUtility.FromJson<ErrorRespuesta>(json);
+                return wrapper.mensaje;
+            }
+            catch
+            {
+                return ""; // si no es un JSON esperable
+            }
+        }
+
+        [System.Serializable]
+        private class ErrorRespuesta
+        {
+            public string mensaje;
+        }
+        
         [System.Serializable]
         private class UsuarioRegisterDTO
         {

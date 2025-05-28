@@ -322,7 +322,7 @@ MonoBehaviour:
   inputUser: {fileID: 539890721}
   inputPassword: {fileID: 477373777}
   errorText: {fileID: 1745199714}
-  adminCode: pIpas
+  adminCode: 1
   inputRepeatPassword: {fileID: 116330731}
   inputEmail: {fileID: 1639699166}
   togglePlayer: {fileID: 2012888482}
