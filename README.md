@@ -30,7 +30,9 @@
  `Backend/ProyectoCentinela/ProyectoCentinela.sln`
 3. Ejecuta el proyecto (`program.cs`) desde tu IDE (.NET SDK 7+ requerido).
 4. Asegúrate de que MySQL está activo en XAMPP y ejecuta el script SQL proporcionado para crear la base de datos en `Backend/pryoecto_centinela.sql`.
-   ---
+
+---
+
 ### 🧰 Configuración de XAMPP (o servicio MySQL equivalente)
 
 Este proyecto requiere una instancia de MySQL activa. Para ello, puedes usar **XAMPP** u otra solución similar.
@@ -44,7 +46,9 @@ Este proyecto requiere una instancia de MySQL activa. Para ello, puedes usar **X
 4. Accede a `http://localhost/phpmyadmin` y crea la base de datos ejecutando el script `.sql` proporcionado en este proyecto.
 
 > 💡 Si usas otro gestor como Laragon, WAMP o MySQL nativo, asegúrate de usar los mismos datos de conexión configurados en el archivo de la API.
+
 ---
+
 5. Abre el proyecto en Unity 6 y ejecuta la escena `LoginScene`.
 
 ## 🎮 Gameplay
