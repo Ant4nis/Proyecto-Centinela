@@ -53,7 +53,7 @@ Este proyecto requiere una instancia de MySQL activa. Para ello, puedes usar **X
 
 ## 🎮 Gameplay
 
-El jugador explora un entorno simulado, recoge armas y derrota enemigos para obtener puntos. La puntuación se registra en el leaderboard si está en modo competitivo. Los elementos del entorno son dinámicos y destructibles, con mapas generados aleatoriamente a partir de plantillas.
+El jugador explora un entorno simulado, recoge armas y derrota enemigos para obtener puntos. La puntuación se registra en el leaderboard si está en modo competitivo. Los elementos del entorno son dinámicos y destruibles, con mapas generados aleatoriamente a partir de plantillas.
 
 | Acción                | Tecla             |
 |-----------------------|------------------|
