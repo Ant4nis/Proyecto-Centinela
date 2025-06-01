@@ -41,8 +41,8 @@ namespace Managers
         {
             using UnityWebRequest request = UnityWebRequest.Get("http://localhost:5000/api/sesion");
             request.SetRequestHeader("Content-Type", "application/json");
-            request.SetRequestHeader("UsuarioActualId", UsuarioSesion.Instancia.Id.ToString());
-            Debug.Log("📡 Enviando ID del usuario actual: " + UsuarioSesion.Instancia.Id); // Opcional para confirmar
+            request.SetRequestHeader("UsuarioActualId", UsuarioSesion.Instance.Id.ToString());
+            Debug.Log("📡 Enviando ID del usuario actual: " + UsuarioSesion.Instance.Id); // Opcional para confirmar
             yield return request.SendWebRequest();
             
             if (request.result == UnityWebRequest.Result.Success)
@@ -55,8 +55,8 @@ namespace Managers
                     SesionItem nuevaTarjeta = Instantiate(tarjetaPrefab, contentTransform);
 
                     nuevaTarjeta.NombreTMP.text =
-                        sesion.usuarioId == UsuarioSesion.Instancia.Id
-                            ? UsuarioSesion.Instancia.Nombre
+                        sesion.usuarioId == UsuarioSesion.Instance.Id
+                            ? UsuarioSesion.Instance.Nombre
                             : sesion.usuario;
 
                     if (DateTime.TryParse(sesion.ultimaConexion, out var fecha))
@@ -70,7 +70,7 @@ namespace Managers
 
                     nuevaTarjeta.IpTMP.text = sesion.ip;
 
-                    bool esUsuarioActual = sesion.usuarioId == UsuarioSesion.Instancia.Id;
+                    bool esUsuarioActual = sesion.usuarioId == UsuarioSesion.Instance.Id;
                     nuevaTarjeta.EstadoIcon.color = esUsuarioActual ? colorConectado : colorDesconectado;
 
                     // Inicializa la tarjeta con los datos del usuario

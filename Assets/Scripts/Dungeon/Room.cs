@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Managers;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
@@ -35,7 +37,8 @@ namespace Dungeon
         /// Evento que se lanza cuando el jugador entra en esta sala.
         /// </summary>
         public static event Action<Room> PlayerInRoomEvent;
-
+        private int _enemiesAlive;
+        
         [Header("Configuración de Room")]
         [Tooltip("Tipo de habitación para esta sala (entrada, puzzle, combate, etc).")]
         [SerializeField] private RoomType roomType;
@@ -58,6 +61,11 @@ namespace Dungeon
         [Tooltip("Posiciones en las que se instanciarán puertas hacia el oeste.")]
         [SerializeField] private Transform[] doorWPos;
 
+        [FormerlySerializedAs("enemigos")]
+        [Header("Enemigos de la sala")]
+        [Tooltip("Enemigos colocados manualmente en esta sala.")]
+        [SerializeField] private List<GameObject> enemies = new();
+        
         /// <summary>
         /// Indica si la sala ha sido completada.
         /// </summary>
@@ -91,6 +99,17 @@ namespace Dungeon
             BuildDoor();
             TemplateRoomCreation();
             PuzzleRoomCreation();
+        }
+        
+        private void Update()
+        {
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                Debug.Log("💡 Enemigos de la sala eliminados. Abriendo puertas...");
+                OpenDoors();
+            }
+#endif
         }
 
         /// <summary>
@@ -172,6 +191,22 @@ namespace Dungeon
                     }
                 }
             }
+        }
+
+        public Vector3 GetAvailableTile()
+        {
+            /*
+             * List<Vector3> freeTiles = (from tile in _tileList where tile.Value select tile.Key).ToList();
+             */
+            
+            List<Vector3> freeTiles = _tileList
+                .Where(tile => tile.Value)
+                .Select(tile => tile.Key)
+                .ToList();
+            
+            int randomTile = Random.Range(0, freeTiles.Count);
+            Vector3 pos = freeTiles[randomTile];
+            return pos;
         }
 
         /// <summary>
@@ -273,6 +308,23 @@ namespace Dungeon
             if (other.gameObject.CompareTag(nameof(Player)))
             {
                 PlayerInRoomEvent?.Invoke(this);
+            }
+        }
+        
+        /// <summary>
+        /// Llamado por un enemigo cuando muere. Si ya no quedan enemigos vivos, abre las puertas.
+        /// </summary>
+        public void NotifyDeadEnemy(GameObject enemy)
+        {
+            if (enemies.Contains(enemy))
+            {
+                enemies.Remove(enemy);
+                if (enemies.Count == 0)
+                {
+                    Debug.Log($"✅ Sala {gameObject.name} completada. ¡Abriendo puertas!");
+                    RoomFinished = true;
+                    OpenDoors();
+                }
             }
         }
 

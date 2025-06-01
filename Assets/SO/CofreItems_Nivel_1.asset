@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d71cb8c4a33141c980a3a0acf77e83ab, type: 3}
+  m_Name: CofreItems_Nivel_1
+  m_EditorClassIdentifier: 
+  AvailableItems:
+  - {fileID: 8531576416940367794, guid: 9a75613e99da10e4683c3f8dc31fc28c, type: 3}
+  - {fileID: 8531576416940367794, guid: 67fa4c506eebf8c4da8880703d61b2cb, type: 3}
+  - {fileID: 8531576416940367794, guid: 12f243be45add294ca4fcf7c2cc7ab8d, type: 3}
+  - {fileID: 8531576416940367794, guid: 57f8d4a3c24360a48b1c7ce15b625215, type: 3}
+  - {fileID: 8531576416940367794, guid: 43c514a6575d15b4898299633d2a6f78, type: 3}
+  - {fileID: 8531576416940367794, guid: 623455aeb55889345936840a918d259c, type: 3}
+  - {fileID: 8531576416940367794, guid: 625f58a0476779c4cb62a870170d31f7, type: 3}

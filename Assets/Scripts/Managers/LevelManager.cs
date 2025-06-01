@@ -1,10 +1,14 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Dungeon;
 using Dungeon.Lists;
+using Enemy.FSM;
+using Extra;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -17,13 +21,8 @@ namespace Managers
     /// 5. Cierra las puertas de la sala si no está completada al entrar el jugador.
     /// 6. Se suscribe y desuscribe a eventos de entrada en sala y activación de portal.
     /// </summary>
-    public class LevelManager : MonoBehaviour
+    public class LevelManager : Singleton<LevelManager>
     {
-        /// <summary>
-        /// Instancia global del LevelManager accesible desde cualquier parte del juego.
-        /// </summary>
-        public static LevelManager Instance;
-        
         [Header("TEMPORAL")]
         [Tooltip("Referencia al Transform del jugador para teletransportarlo.")]
         [SerializeField] private Transform player;
@@ -51,6 +50,7 @@ namespace Managers
         
         private int _currentLevelIndex;
         private int _currentDungeonIndex;
+        private int _enemiesCounter;
         private GameObject _currentDungeonGO;
         
         /// <summary>
@@ -58,13 +58,9 @@ namespace Managers
         /// </summary>
         private Room _currentRoom;
         
-        /// <summary>
-        /// Inicializa la instancia Singleton al cargar la escena.
-        /// </summary>
-        private void Awake()
-        {
-            Instance = this;
-        }
+        // lista de items del nivel actual
+        private List<GameObject> _itemsTreasureCurrentLevel = new List<GameObject>();
+  
 
         /// <summary>
         /// Al iniciar, crea la primera mazmorra.
@@ -83,6 +79,8 @@ namespace Managers
                dungeonLibrary.Levels[_currentLevelIndex].Dungeons[_currentDungeonIndex],
                transform
            );
+           
+           _itemsTreasureCurrentLevel = new List<GameObject>(dungeonLibrary.Levels[_currentLevelIndex].TreasureItems.AvailableItems);
         }
 
         /// <summary>
@@ -126,6 +124,44 @@ namespace Managers
             }
         }
 
+        private void CreateEnemiesInRoom()
+        {
+           /* int enemiesToCreate = GetQuantityEnemiesToCreate();
+
+            for (int i = 0; i < enemiesToCreate; i++)
+            {
+                Vector3 freePos = _currentRoom.GetAvailableTile();
+                EnemyFSM enemy = Instantiate(GetRandomEnemyToCreate(), freePos, Quaternion.identity, _currentRoom.transform);
+                enemy.RoomParent = _currentRoom;
+                
+            }*/
+        }
+        
+        private EnemyFSM GetRandomEnemyToCreate()
+        {
+            EnemyFSM[] enemies = dungeonLibrary.Levels[_currentLevelIndex].Enemies;
+            
+            int indexRandom = Random.Range(0, enemies.Length);
+            EnemyFSM enemyCreated = enemies[indexRandom];
+
+            return enemyCreated;
+        }
+        
+        private int GetQuantityEnemiesToCreate()
+        {
+            int quantity = Random.Range(dungeonLibrary.Levels[_currentLevelIndex].MinEnemiesForRoom,
+                dungeonLibrary.Levels[_currentLevelIndex].MaxEnemiesForRoom + 1);
+            return quantity;
+        }
+
+        public GameObject GetItemForTreasure()
+        {
+            int randomIndex = Random.Range(0, _itemsTreasureCurrentLevel.Count);
+            GameObject item = _itemsTreasureCurrentLevel[randomIndex];
+            _itemsTreasureCurrentLevel.Remove(item);
+            return item;
+        }
+
         /// <summary>
         /// Coroutine que aplica el fade de salida, espera la duración,
         /// cambia de mazmorra y aplica el fade de entrada.
@@ -150,6 +186,15 @@ namespace Managers
             if (_currentRoom.RoomFinished == false)
             {
                 _currentRoom.CloseDoors();
+                switch (_currentRoom.RoomType)
+                {
+                    case RoomType.EnemyRoom:
+                        CreateEnemiesInRoom();
+                        break;
+                    case RoomType.BossRoom:
+                        //boss
+                        break;
+                }
             }
         }
 

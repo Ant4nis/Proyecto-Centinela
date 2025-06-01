@@ -18,7 +18,7 @@ namespace Items.Weapons
             Animate();
 
             // Dirección base
-            Vector3 direction = shootingPosition.right.normalized;
+            Vector3 direction = transform.right.normalized;
 
             // Aplica dispersión
             float spreadAngle = Random.Range(itemWeapon.MinAccuracy, itemWeapon.MaxAccuracy);
@@ -28,7 +28,7 @@ namespace Items.Weapons
             // Obtener proyectil desde el pool
             Projectile projectile = ProjectilePool.Instance.GetProjectile(projectilePrefab);
             projectile.OriginalPrefab = projectilePrefab; // necesario para devolver al pool
-            //projectile.ProjectileDamage = itemWeapon.Damage;
+            projectile.ProjectileDamage = itemWeapon.Damage;
 
             // Reinicia estado y activa
             projectile.ResetProjectile(shootingPosition.position, direction);

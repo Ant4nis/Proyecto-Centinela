@@ -240,5 +240,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemPos: {fileID: 9106323712614165265}
-  customTreasure: 1
-  customItem: {fileID: 5977546826817091917, guid: 3252489d216c6e64d900a9b8a3055f54, type: 3}
+  customTreasure: 0
+  customItem: {fileID: 0}

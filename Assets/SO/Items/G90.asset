@@ -19,7 +19,7 @@ MonoBehaviour:
   Type: 1
   Quality: 0
   Damage: 2.3
-  TimeBetweenAttacks: 0.9
+  TimeBetweenAttacks: 0.09
   MinAccuracy: -4
   MaxAccuracy: 4
   Ammo: 1

@@ -1,4 +1,5 @@
 ﻿using System;
+using Enemy.FSM;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -43,5 +44,10 @@ namespace Dungeon.Lists
 
         [Tooltip("Prefabs de mazmorras disponibles en este nivel.")]
         public GameObject[] Dungeons;
+        public EnemyFSM[] Enemies;
+        public int MinEnemiesForRoom;
+        public int MaxEnemiesForRoom;
+        
+        public TreasureItems TreasureItems;
     }
 }

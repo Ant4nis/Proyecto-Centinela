@@ -76,12 +76,12 @@ namespace UIForms
                 var respuesta = JsonUtility.FromJson<RespuestaLogin>(request.downloadHandler.text);
 
                 // Guardar sesión activa
-                UsuarioSesion.Instancia.Id = respuesta.id;
-                UsuarioSesion.Instancia.Nombre = respuesta.nombre;
-                UsuarioSesion.Instancia.Email = email;
-                UsuarioSesion.Instancia.Rol = respuesta.rol;
-                UsuarioSesion.Instancia.Password = contrasena;
-                UsuarioSesion.Instancia.RolId = respuesta.rolId;
+                UsuarioSesion.Instance.Id = respuesta.id;
+                UsuarioSesion.Instance.Nombre = respuesta.nombre;
+                UsuarioSesion.Instance.Email = email;
+                UsuarioSesion.Instance.Rol = respuesta.rol;
+                UsuarioSesion.Instance.Password = contrasena;
+                UsuarioSesion.Instance.RolId = respuesta.rolId;
 
                 Debug.Log("✅ Login exitoso. Rol: " + respuesta.rol);
 

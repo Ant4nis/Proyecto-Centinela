@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -14,9 +15,9 @@ TagManager:
   - Projectile
   - Room
   - Player
-  - 
-  - 
-  - 
+  - Obstacle
+  - EnemyProjectile
+  - Enemy
   - 
   - 
   - 
@@ -49,6 +50,9 @@ TagManager:
     locked: 0
   - name: Door
     uniqueID: 2948705319
+    locked: 0
+  - name: Enemy
+    uniqueID: 588287609
     locked: 0
   - name: Player
     uniqueID: 406772635

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Items;
 using Items.Weapons;
+using Managers;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -44,8 +45,11 @@ namespace Player
         private bool _isAttacking;
         private float _lastShootTime = Mathf.NegativeInfinity;
 
+        private Coroutine _nameWeaponCoroutine;
+        
+        private ItemText _nameText;
         private int _indexWeapon; // para cambiar entre armas
-        private Weapon[] _equippedWeapons = new Weapon[2]; // max dos armas equipadas
+        private Weapon[] _equipedWeapons = new Weapon[2]; // max dos armas equipadas
 
         /// <summary>Arma actual equipada por el jugador.</summary>
         public Weapon CurrentWeapon => _currentWeapon;
@@ -59,10 +63,6 @@ namespace Player
             _playerMovement = GetComponent<PlayerMovement>();
             _playerAnimationController = GetComponentInChildren<PlayerAnimationController>();
             _playerAmmo = GetComponent<PlayerAmmo>();
-        }
-
-        private void Start()
-        {
         }
 
         private void Update()
@@ -80,11 +80,12 @@ namespace Player
             _currentWeapon = Instantiate(weaponPrefab, weaponRotationPos.position, weaponRotationPos.rotation, weaponRotationPos);
             _spriteRendererSprite = _currentWeapon.transform.Find("Sprite")?.GetComponent<SpriteRenderer>();
             _spriteRendererAmmo = _currentWeapon.transform.Find("Ammo")?.GetComponent<SpriteRenderer>();
-            _equippedWeapons[_indexWeapon] = _currentWeapon;
+            _equipedWeapons[_indexWeapon] = _currentWeapon;
             
             if (_spriteRendererSprite == null || _spriteRendererAmmo == null)
                 Debug.LogWarning("No se encontraron los SpriteRenderers del arma.");
             
+            ShowCurrentWeaponName();
         }
 
         /// <summary>
@@ -120,10 +121,19 @@ namespace Player
         {
             while (true)
             {
-                ShootWeapon();
+                if (_currentWeapon == null) yield break;
+
+                var weaponData = _currentWeapon.ItemWeapon;
+
+                if (Time.time >= _lastShootTime + weaponData.TimeBetweenAttacks)
+                {
+                    ShootWeapon();
+                }
+
                 yield return null;
             }
         }
+
 
         /// <summary>
         /// Lanza un disparo si el arma está lista y hay munición disponible.
@@ -133,8 +143,7 @@ namespace Player
         {
             if (_currentWeapon == null) return;
 
-            if (Time.time < _lastShootTime + itemWeapon.TimeBetweenAttacks) return;
-
+            if (Time.time < _lastShootTime + _currentWeapon.ItemWeapon.TimeBetweenAttacks) return;
             _lastShootTime = Time.time;
 
             _playerAmmo.SpendAmmo(_currentWeapon.ItemWeapon.Ammo);
@@ -175,45 +184,45 @@ namespace Player
 
         public void EquipWeapon(Weapon weapon)
         {
-            if (_equippedWeapons[0] == null)
+            if (_equipedWeapons[0] == null)
             {
                 CreateWeapon(weapon);
                 itemWeapon = _currentWeapon.ItemWeapon;
                 return;
             }
 
-            if (_equippedWeapons[1] == null)
+            if (_equipedWeapons[1] == null)
             {
                 _indexWeapon++;
-                _equippedWeapons[0].gameObject.SetActive(false);
+                _equipedWeapons[0].gameObject.SetActive(false);
                 CreateWeapon(weapon);
                 itemWeapon = _currentWeapon.ItemWeapon;
                 return;
             }
             
             Destroy(_currentWeapon.gameObject);
-            _equippedWeapons[_indexWeapon] = null;
+            _equipedWeapons[_indexWeapon] = null;
             CreateWeapon(weapon);
         }
 
         public void ChangeWeapon()
         {
             Debug.Log("antes del if");
-            if (_equippedWeapons[1] == null) return;
+            if (_equipedWeapons[1] == null) return;
             Debug.Log("despues del if");
 
             // Desactivar todas las armas y limpiar referencias
-            for (int i = 0; i < _equippedWeapons.Length; i++)
+            for (int i = 0; i < _equipedWeapons.Length; i++)
             {
-                if (_equippedWeapons[i] != null)
+                if (_equipedWeapons[i] != null)
                 {
-                    _equippedWeapons[i].gameObject.SetActive(false);
+                    _equipedWeapons[i].gameObject.SetActive(false);
                 }
             }
     
             // Alternar 0-1 
             _indexWeapon = 1 - _indexWeapon;
-            _currentWeapon = _equippedWeapons[_indexWeapon];
+            _currentWeapon = _equipedWeapons[_indexWeapon];
             _currentWeapon.gameObject.SetActive(true);
 
             // 🔄 Solo actualizar el arma activa
@@ -221,6 +230,35 @@ namespace Player
             _spriteRendererAmmo = _currentWeapon.transform.Find("Ammo")?.GetComponent<SpriteRenderer>();
 
             Debug.Log($"Arma cambiada a: {_currentWeapon.name}");
+            ShowCurrentWeaponName();
+        }
+
+        private void ShowCurrentWeaponName()
+        {
+            if (_nameWeaponCoroutine != null)
+            {
+                StopCoroutine(_nameWeaponCoroutine);
+            }
+
+            if (_nameText != null && _nameText.gameObject.activeSelf)
+            {
+                Destroy(_nameText.gameObject);
+            }
+
+            _nameWeaponCoroutine = StartCoroutine(IECurrentWeaponText());
+        }
+
+        private IEnumerator IECurrentWeaponText()
+        {
+            Vector3 textPos = transform.position + Vector3.up;
+            Color weaponColor = GameManager.Instance.GetWeaponColor(_currentWeapon.ItemWeapon.Quality);
+            _nameText = ItemTextManager.Instance.ShowMessage(_currentWeapon.ItemWeapon.ID, textPos, weaponColor);
+            _nameText.transform.SetParent(transform);
+            
+            
+            yield return new WaitForSeconds(1.5f);
+            
+            Destroy(_nameText.gameObject);
         }
         
         /// <summary>

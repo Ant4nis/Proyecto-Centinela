@@ -17,7 +17,7 @@
         /// <summary>
         /// Acceso global a la sesión activa del usuario.
         /// </summary>
-        public static UsuarioSesion Instancia => instancia ??= new UsuarioSesion();
+        public static UsuarioSesion Instance => instancia ??= new UsuarioSesion();
 
         /// <summary>
         /// Restablece todos los datos de la sesión actual a sus valores por defecto.

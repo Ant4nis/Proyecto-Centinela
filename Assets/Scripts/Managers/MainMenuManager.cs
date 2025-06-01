@@ -30,13 +30,16 @@ namespace Managers
         [Header("Controlador de sesiones")]
         [Tooltip("Script que gestiona la lista de sesiones")]
         [SerializeField] private SesionListManager sesionListManager;
+        
+        [Tooltip("Este panel se activará cuando se pulse Créditos.")]
+        [SerializeField] private GameObject creditsPanel;
 
         /// <summary>
         /// Inicializa el menú comprobando el rol del usuario y ajustando los paneles.
         /// </summary>
         private void Start()
         {
-            if (UsuarioSesion.Instancia.Rol != "Administrador" && adminOnlyPanel != null)
+            if (UsuarioSesion.Instance.Rol != "Administrador" && adminOnlyPanel != null)
             {
                 adminOnlyPanel.SetActive(false);
                 Debug.Log("Panel de gestiones oculto: el usuario no es administrador.");
@@ -47,7 +50,7 @@ namespace Managers
                 FadeController.Instance.FadeIn();
 
             // Lógica de rol (ocultar panel admin si no corresponde)
-            if (UsuarioSesion.Instancia.Rol != "Administrador" && adminOnlyPanel != null)
+            if (UsuarioSesion.Instance.Rol != "Administrador" && adminOnlyPanel != null)
             {
                 adminOnlyPanel.SetActive(false);
                 Debug.Log("Panel de gestiones oculto: el usuario no es administrador.");
@@ -103,5 +106,23 @@ namespace Managers
             if (originPanel != null) originPanel.SetActive(true);
         }
         
+        /// <summary>
+        /// Muestra el panel de créditos y oculta el panel principal.
+        /// </summary>
+        public void ShowCreditsPanel()
+        {
+            if (originPanel != null) originPanel.SetActive(false);
+            if (creditsPanel != null) creditsPanel.SetActive(true);
+        }
+
+        /// <summary>
+        /// Oculta el panel de créditos y vuelve al principal.
+        /// </summary>
+        public void HideCreditsPanel()
+        {
+            if (creditsPanel != null) creditsPanel.SetActive(false);
+            if (originPanel != null) originPanel.SetActive(true);
+        }
+
     }
 }

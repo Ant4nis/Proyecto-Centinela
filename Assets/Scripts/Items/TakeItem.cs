@@ -38,7 +38,8 @@ namespace Items
             Vector3 textPosition = new Vector3(0f, 1f, 0f);
             if (item is ItemWeapon weapon)
             {
-                _createdText = ItemTextManager.Instance.ShowMessage(weapon.ID, transform.position + textPosition, Color.green);
+                Color weaponColor = GameManager.Instance.GetWeaponColor(weapon.Quality);
+                _createdText = ItemTextManager.Instance.ShowMessage(weapon.ID, transform.position + textPosition, weaponColor);
             }
             else
             {
@@ -49,8 +50,12 @@ namespace Items
 
         private void HideName()
         {
-            Destroy(_createdText.gameObject);
-            _createdText = null; // Evitar referencias colgantes
+            if (_createdText != null && _createdText.gameObject != null)
+            {
+                Destroy(_createdText.gameObject);
+                _createdText = null;
+            }
+            
         }
 
         private void OnTriggerEnter2D(Collider2D other)

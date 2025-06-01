@@ -72,15 +72,39 @@ namespace Items.Weapons
         /// <param name="other">Collider del objeto con el que se colisionó.</param>
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // Aplica daño al objetivo si soporta la interfaz ITakeDamage
-            other.GetComponent<ITakeDamage>()?.TakeDamage(1f);
+            Debug.Log($"🎯 Proyectil ha tocado: {other.name}");
+
+            var direct = other.GetComponent<ITakeDamage>();
+            if (direct != null)
+            {
+                Debug.Log($"✅ Encontrado ITakeDamage directo en: {other.name}");
+                direct.TakeDamage(ProjectileDamage);
+            }
+            else
+            {
+                var inParent = other.GetComponentInParent<ITakeDamage>();
+                if (inParent != null)
+                {
+                    Debug.Log($"✅ Encontrado ITakeDamage en padre de: {other.name}");
+                    inParent.TakeDamage(ProjectileDamage);
+                }
+                else
+                {
+                    Debug.LogWarning($"❌ NO se encontró ITakeDamage en {other.name} ni en su padre.");
+                }
+            }
 
             // Devuelve el proyectil al pool
             if (OriginalPrefab != null)
+            {
                 ProjectilePool.Instance.ReturnToPool(OriginalPrefab, this);
+            }
             else
+            {
                 gameObject.SetActive(false);
+            }
         }
+
         
         /// <summary>Al activarse, reinicia su velocidad basándose en la dirección asignada.</summary>
         private void OnEnable()

@@ -121,25 +121,34 @@ namespace ProyectoCentinela.Controllers
         /// Actualizar un usuario existente.
         /// </summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUsuario(int id, [FromBody] DTOs.UsuarioUpdateDTO usuarioActualizado)
+        public async Task<IActionResult> UpdateUsuario(int id, [FromBody] UsuarioUpdateDTO usuarioActualizado)
         {
             if (id != usuarioActualizado.Id)
             {
                 return BadRequest(new { mensaje = "El ID del usuario no coincide." });
             }
-
+        
             // Obtenemos el usuario existente
             var usuarioExistente = await _context.Usuarios
                 .Include(u => u.Rol)
                 .Include(u => u.Sesiones)
                 .Include(u => u.Leaderboards)
                 .FirstOrDefaultAsync(u => u.Id == id);
-
+        
             if (usuarioExistente == null)
             {
                 return NotFound(new { mensaje = "Usuario no encontrado." });
             }
-
+        
+            // Validar si otro usuario ya usa el mismo email
+            bool emailEnUso = await _context.Usuarios
+                .AnyAsync(u => u.Email == usuarioActualizado.Email && u.Id != id);
+        
+            if (emailEnUso)
+            {
+                return Conflict(new { mensaje = "Ese email ya está en uso por otro usuario." });
+            }
+        
             // Actualizamos los datos básicos
             usuarioExistente.NombreUsuario = usuarioActualizado.NombreUsuario;
             usuarioExistente.Email = usuarioActualizado.Email;
@@ -148,31 +157,31 @@ namespace ProyectoCentinela.Controllers
                 usuarioExistente.ContrasenaHash = usuarioActualizado.ContrasenaHash;
             }
             usuarioExistente.RolId = usuarioActualizado.RolId;
-
+        
             try
             {
                 await _context.SaveChangesAsync();
-
-                // Recargamos las sesiones relacionadas para reflejar los nuevos datos en la navegación inversa
+        
+                // Recargar sesiones relacionadas si existen
                 var sesionesRelacionadas = await _context.Sesiones
                     .Where(s => s.UsuarioId == usuarioExistente.Id)
                     .ToListAsync();
-
+        
                 foreach (var sesion in sesionesRelacionadas)
                 {
                     _context.Entry(sesion).Reference(s => s.Usuario).Load();
                 }
-
+        
                 return Ok(new { mensaje = "Usuario actualizado correctamente." });
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!_context.Usuarios.Any(e => e.Id == id))
                     return NotFound(new { mensaje = "Usuario no encontrado." });
-
+        
                 throw;
             }
-            
         }
+
     }
 }

@@ -660,7 +660,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3526764948550226660, guid: 5e03ba84f395cfa449042652619e4a23, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3091987690077944851}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e03ba84f395cfa449042652619e4a23, type: 3}
 --- !u!4 &2992165771285769533 stripped
@@ -1988,6 +1991,76 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 470792227309025547, guid: 734a81dfa12e7d04b869b9702037546b, type: 3}
   m_PrefabInstance: {fileID: 5234802084622131320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5264772258596778773
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2992165771285769533}
+    m_Modifications:
+    - target: {fileID: 4606490660290704100, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: customItem
+      value: 
+      objectReference: {fileID: 8531576416940367794, guid: 57f8d4a3c24360a48b1c7ce15b625215, type: 3}
+    - target: {fileID: 4606490660290704100, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: customTreasure
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8145624394063196112, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+      propertyPath: m_Name
+      value: Treasure - Bedside_Table
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+--- !u!4 &3091987690077944851 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7203727599250706182, guid: d9ce5351e09a5fa439467a780f567b4c, type: 3}
+  m_PrefabInstance: {fileID: 5264772258596778773}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6131035415178556227
 PrefabInstance:

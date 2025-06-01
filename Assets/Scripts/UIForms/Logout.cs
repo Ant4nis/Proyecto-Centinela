@@ -7,7 +7,7 @@ namespace UIForms
     {
         public void Disconnect()
         {
-            UsuarioSesion.Instancia.Reset();
+            UsuarioSesion.Instance.Reset();
             SceneManager.LoadScene("LoginScene");
         }
     }

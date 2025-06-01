@@ -1,6 +1,7 @@
 using UnityEngine;
 using ScriptableObjects;
 using Interfaces;
+using Managers;
 
 namespace Player
 {
@@ -17,6 +18,7 @@ namespace Player
     {
         [Header("Configuración del Jugador (Scriptable Object)"), Tooltip("Configuración del jugador que contiene los valores de salud y armadura.")]
         [SerializeField] private PlayerConfiguration playerConfig;
+        [SerializeField] private DeathHandler deathHandler;
 
         /// <summary>
         /// Método de prueba para simular la recepción de daño y la restauración de salud y armadura.
@@ -100,7 +102,8 @@ namespace Player
         /// </summary>
         private void HandlePlayerDeath()
         {
-            // TODO: Implementar la lógica de muerte del jugador (activar animación, notificar GameManager, etc.)
+            deathHandler.HandleDeath();
+            Destroy(gameObject);
         }
     }
 }

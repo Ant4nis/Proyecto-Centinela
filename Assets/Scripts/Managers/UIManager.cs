@@ -15,12 +15,8 @@ namespace Managers
     /// 3. Actualiza los textos de la UI con los valores actuales y máximos.
     /// 4. Gestiona el efecto de fade de transición entre mazmorras.
     /// </summary>
-    public class UIManager : MonoBehaviour
+    public class UIManager : Singleton<UIManager>
     {
-        /// <summary>
-        /// Instancia global del UIManager accesible desde cualquier parte del juego.
-        /// </summary>
-        public static UIManager Instance;
         
         [Header("PARA TESTING")]
         [Tooltip("Configuración temporal del jugador para pruebas.")]
@@ -45,14 +41,6 @@ namespace Managers
         [Header("UI Extra")]
         [Tooltip("CanvasGroup utilizado para el efecto de fade en transiciones.")]
         [SerializeField] private CanvasGroup fadePanel;
-
-        /// <summary>
-        /// Inicializa la instancia Singleton al cargar el componente.
-        /// </summary>
-        private void Awake()
-        {
-            Instance = this;
-        }
 
         /// <summary>
         /// Llamado cada frame para actualizar dinámicamente la UI.

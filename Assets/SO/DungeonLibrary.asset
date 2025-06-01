@@ -19,6 +19,12 @@ MonoBehaviour:
     - {fileID: 183360293822425058, guid: b9fbcc4f2711d9b4f8632f10c8abdb06, type: 3}
     - {fileID: 2653304289117278757, guid: 949eadb3ac11e31438f47dda60610c2d, type: 3}
     - {fileID: 7640682517735389312, guid: 914860187b6b58d4aa728f7ffa7a982f, type: 3}
+    Enemies:
+    - {fileID: -1238398490040878195, guid: 3329076f29757864da78ddea82e322de, type: 3}
+    - {fileID: -769397972157300664, guid: 9c05950172e04074ea2037584906286c, type: 3}
+    MinEnemiesForRoom: 2
+    MaxEnemiesForRoom: 4
+    TreasureItems: {fileID: 11400000, guid: 9ae15f1690093b149ab59297e45a29a1, type: 2}
   doorN: {fileID: 2506247792678455143, guid: 2c01da102510203458079e1bd6de4889, type: 3}
   doorS: {fileID: 4664673567930912773, guid: 646ddabe23f085045aab5edd44727fae, type: 3}
   doorE: {fileID: 4364617690661492968, guid: 228415234f8d5e14ba64a8a26e49eb92, type: 3}

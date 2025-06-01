@@ -2,6 +2,7 @@
 using ProyectoCentinela.Data;
 using ProyectoCentinela.Models;
 using Microsoft.EntityFrameworkCore;
+using ProyectoCentinela.DTOs;
 
 namespace ProyectoCentinela.Controllers
 {
@@ -68,5 +69,45 @@ namespace ProyectoCentinela.Controllers
 
             return Ok(new { mensaje = "Registro en Leaderboard eliminado correctamente" });
         }
+        
+        /// <summary>
+        /// Crea una nueva entrada en el leaderboard.
+        /// </summary>
+        /// <summary>
+        /// Crea una nueva entrada en el leaderboard.
+        /// Suma la puntuación a la última registrada para ese usuario.
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> PostLeaderboard([FromBody] LeaderboardDTO entradaDTO)
+        {
+            var usuario = await _context.Usuarios.FindAsync(entradaDTO.UsuarioId);
+            if (usuario == null)
+                return NotFound(new { mensaje = "Usuario no encontrado" });
+
+            var ultimaEntrada = await _context.Leaderboards
+                .Where(l => l.UsuarioId == entradaDTO.UsuarioId)
+                .OrderByDescending(l => l.Fecha)
+                .FirstOrDefaultAsync();
+
+            int puntuacionTotal = entradaDTO.Puntuacion;
+            if (ultimaEntrada != null)
+            {
+                puntuacionTotal += ultimaEntrada.Puntuacion;
+            }
+
+            var nuevaEntrada = new Leaderboard
+            {
+                UsuarioId = entradaDTO.UsuarioId,
+                Puntuacion = puntuacionTotal,
+                Nivel = entradaDTO.Nivel,
+                Fecha = entradaDTO.Fecha
+            };
+
+            _context.Leaderboards.Add(nuevaEntrada);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensaje = "Puntuación añadida correctamente", entrada = nuevaEntrada });
+        }
+
     }
 }

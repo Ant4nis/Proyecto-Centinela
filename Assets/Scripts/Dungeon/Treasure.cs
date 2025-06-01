@@ -1,4 +1,5 @@
 using System;
+using Managers;
 using UnityEngine;
 
 namespace Dungeon
@@ -27,6 +28,11 @@ namespace Dungeon
             if (customTreasure)
             {
                 Instantiate(customItem, transform.position, Quaternion.identity, itemPos);
+            }
+            else
+            {
+                GameObject item = LevelManager.Instance.GetItemForTreasure();
+                Instantiate(item, transform.position, Quaternion.identity, itemPos);
             }
         }
 

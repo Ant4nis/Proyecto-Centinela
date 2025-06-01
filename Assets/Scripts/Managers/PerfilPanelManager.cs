@@ -47,8 +47,8 @@ namespace Managers
         {
             if (SesionBridge.UsuarioIdParaEdicion.HasValue)
             {
-                CargarUsuarioDesdeId(SesionBridge.UsuarioIdParaEdicion.Value);
-                SesionBridge.Limpiar();
+                int id = SesionBridge.UsuarioIdParaEdicion.Value;
+                StartCoroutine(CargarDatosDesdeAPI(id, limpiarBridge: true)); // <- nuevo parámetro
             }
             else
             {
@@ -81,10 +81,10 @@ namespace Managers
             {
                 Debug.Log($"✅ Cuenta con ID={UsuarioEditadoId} eliminada correctamente.");
 
-                if (UsuarioEditadoId == UsuarioSesion.Instancia.Id)
+                if (UsuarioEditadoId == UsuarioSesion.Instance.Id)
                 {
                     Debug.Log("Usuario eliminado era el actual. Limpiando sesión y volviendo al login.");
-                    UsuarioSesion.Instancia.Reset();
+                    UsuarioSesion.Instance.Reset();
                     SceneManager.LoadScene("LoginScene");
                 }
                 else
@@ -128,28 +128,23 @@ namespace Managers
                 yield break;
             }
 
-            int rolId = UsuarioSesion.Instancia.Rol == "Administrador" && adminRoleContainer.activeSelf
+            int rolId = UsuarioSesion.Instance.Rol == "Administrador" && adminRoleContainer.activeSelf
                 ? MapRoleNameToId(roleDropdown.options[roleDropdown.value].text)
-                : UsuarioSesion.Instancia.RolId;
+                : UsuarioSesion.Instance.RolId;
 
             var userData = new UsuarioUpdateDTO
             {
-                Id = UsuarioEditadoId,
-                NombreUsuario = newName,
-                Email = newEmail,
-                ContrasenaHash = string.IsNullOrEmpty(newPassword) ? null : newPassword,
-                RolId = rolId
+                id = UsuarioEditadoId,
+                nombreUsuario = newName,
+                email = newEmail,
+                contrasenaHash = string.IsNullOrEmpty(newPassword) ? null : newPassword,
+                rolId = rolId
             };
 
-            string json = JsonUtility.ToJson(userData)
-                .Replace("\"Id\"", "\"id\"")
-                .Replace("\"NombreUsuario\"", "\"nombreUsuario\"")
-                .Replace("\"Email\"", "\"email\"")
-                .Replace("\"ContrasenaHash\"", "\"contrasenaHash\"")
-                .Replace("\"RolId\"", "\"rolId\"");
+            string json = JsonUtility.ToJson(userData);
 
             string url = $"http://localhost:5000/api/usuario/{UsuarioEditadoId}";
-            Debug.Log($"PUT a: {url} con ID={userData.Id}");
+            Debug.Log($"PUT a: {url} con ID={userData.id}");
 
             using var request = new UnityWebRequest(url, "PUT");
             byte[] body = new System.Text.UTF8Encoding().GetBytes(json);
@@ -163,13 +158,13 @@ namespace Managers
             {
                 Debug.Log("Usuario modificado correctamente.");
 
-                if (UsuarioEditadoId == UsuarioSesion.Instancia.Id)
+                if (UsuarioEditadoId == UsuarioSesion.Instance.Id)
                 {
-                    UsuarioSesion.Instancia.Nombre = newName;
-                    UsuarioSesion.Instancia.Email = newEmail;
-                    UsuarioSesion.Instancia.Password = newPassword;
-                    UsuarioSesion.Instancia.RolId = rolId;
-                    UsuarioSesion.Instancia.Rol = (rolId == 2) ? "Administrador" : "Jugador";
+                    UsuarioSesion.Instance.Nombre = newName;
+                    UsuarioSesion.Instance.Email = newEmail;
+                    UsuarioSesion.Instance.Password = newPassword;
+                    UsuarioSesion.Instance.RolId = rolId;
+                    UsuarioSesion.Instance.Rol = (rolId == 2) ? "Administrador" : "Jugador";
                 }
 
                 mainMenuPanel.SetActive(true);
@@ -190,7 +185,8 @@ namespace Managers
         {
             StartCoroutine(CargarDatosDesdeAPI(id));
         }
-        private IEnumerator CargarDatosDesdeAPI(int id)
+        
+        private IEnumerator CargarDatosDesdeAPI(int id, bool limpiarBridge = false)
         {
             string url = $"http://localhost:5000/api/usuario/{id}";
             Debug.Log($"🔍 Solicitando datos del usuario con ID = {id} → {url}");
@@ -238,7 +234,7 @@ namespace Managers
                 if (adminRoleContainer != null)
                 {
                     bool esAdmin = datos.Rol != null && datos.Rol.Nombre == "Administrador";
-                    adminRoleContainer.SetActive(esAdmin || UsuarioSesion.Instancia.Rol == "Administrador");
+                    adminRoleContainer.SetActive(esAdmin || UsuarioSesion.Instance.Rol == "Administrador");
 
                     int index = roleDropdown.options.FindIndex(opt => opt.text == datos.Rol?.Nombre);
                     if (index != -1) roleDropdown.value = index;
@@ -246,6 +242,8 @@ namespace Managers
 
                 if (confirmDeleteButton != null)
                     confirmDeleteButton.SetActive(false);
+                if (limpiarBridge)
+                    SesionBridge.Limpiar();
             }
             else
             {
@@ -256,14 +254,14 @@ namespace Managers
 
         public void CargarPerfilActual()
         {
-            if (UsuarioSesion.Instancia == null)
+            if (UsuarioSesion.Instance == null)
             {
                 Debug.LogError("UsuarioSesion no está inicializado.");
                 errorText.text = "Error interno: sesión no iniciada.";
                 return;
             }
 
-            UsuarioEditadoId = UsuarioSesion.Instancia.Id;
+            UsuarioEditadoId = UsuarioSesion.Instance.Id;
 
             if (UsuarioEditadoId <= 0)
             {
@@ -272,16 +270,16 @@ namespace Managers
                 return;
             }
 
-            inputName.text = UsuarioSesion.Instancia.Nombre;
-            inputEmail.text = UsuarioSesion.Instancia.Email;
+            inputName.text = UsuarioSesion.Instance.Nombre;
+            inputEmail.text = UsuarioSesion.Instance.Email;
             inputPassword.text = "";
 
             if (adminRoleContainer != null)
             {
-                bool esAdmin = UsuarioSesion.Instancia.Rol == "Administrador";
+                bool esAdmin = UsuarioSesion.Instance.Rol == "Administrador";
                 adminRoleContainer.SetActive(esAdmin);
 
-                int index = roleDropdown.options.FindIndex(opt => opt.text == UsuarioSesion.Instancia.Rol);
+                int index = roleDropdown.options.FindIndex(opt => opt.text == UsuarioSesion.Instance.Rol);
                 if (index != -1) roleDropdown.value = index;
             }
 
@@ -290,6 +288,8 @@ namespace Managers
 
             if (profilePanel != null)
                 profilePanel.SetActive(true);
+            
+            usuarioEditadoId = UsuarioSesion.Instance.Id; // fuerza sobreescribir por si estaba cacheado
         }
 
         [System.Serializable]
@@ -317,11 +317,11 @@ namespace Managers
         [System.Serializable]
         private class UsuarioUpdateDTO
         {
-            public int Id;
-            public string NombreUsuario;
-            public string Email;
-            public string ContrasenaHash;
-            public int RolId;
+            public int id;
+            public string nombreUsuario;
+            public string email;
+            public string contrasenaHash;
+            public int rolId;
         }
     }
 }
